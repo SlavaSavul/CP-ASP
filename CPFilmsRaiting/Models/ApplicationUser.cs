@@ -16,7 +16,7 @@ namespace CPFilmsRaiting.Models
 
         [Required]
         [DataType(DataType.Password)]
-        [RegularExpression(@"^(?=.*[a-z])(?=.*[0-9])\S{1,16}$", ErrorMessage = "Invalid password")]
+        [RegularExpression(@"^([a-z0-9]){4,8}$", ErrorMessage = "Invalid password")]
         public string Password { get; set; }
 
         public string Role { get; set; }
