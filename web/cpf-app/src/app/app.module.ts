@@ -11,6 +11,9 @@ import { LoginComponent } from './components/login/login.component';
 import { MainPageComponent } from './components/main-page/main-page.component';
 import { ReactiveFormsModule }   from '@angular/forms';
 import { ExternalService } from './services/external.service';
+import { ToastrModule } from 'ngx-toastr';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { CommonModule } from '@angular/common';
 
 export const httpInterceptorProviders = [
   { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
@@ -27,7 +30,10 @@ export const httpInterceptorProviders = [
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    BrowserAnimationsModule,
+    CommonModule,
+    ToastrModule.forRoot(),
   ],
   providers: [
     httpInterceptorProviders,

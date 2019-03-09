@@ -11,10 +11,11 @@ namespace CPFilmsRaiting.Data.Repositories
     {
         ApplicationDbContext _context { get; set; }
 
-        public ApplicationUser FindUser(string name, string password)
+        public bool IsExists(string name, string password)
         {
-            return _context.Users
-                .FirstOrDefault(user => user.Email == name && user.Password == password);
+            ApplicationUser applicationUser = _context.Users
+                .FirstOrDefault(user => user.Email == name);
+            return applicationUser != null && applicationUser.Password == password;
         }
 
         public UsersRepository(ApplicationDbContext context)
@@ -25,6 +26,14 @@ namespace CPFilmsRaiting.Data.Repositories
         public IEnumerable<ApplicationUser> GetAll()
         {
             throw new NotImplementedException();
+        }
+
+        public ApplicationUser GetByEmail(string email)
+        {
+            return _context.Users
+                    .Include(user => user.Comments)
+                    .Include(user => user.Raitings)
+                    .FirstOrDefault(user => user.Email == email);
         }
 
         public ApplicationUser Get(string id)
