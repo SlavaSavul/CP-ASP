@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using CPFilmsRaiting.Data;
 using CPFilmsRaiting.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
@@ -18,7 +19,7 @@ namespace CPFilmsRaiting.Controllers
         public JsonResult GetLogin()
         {
             ApplicationUser a = new ApplicationUser();
-            a.Login = "asd";
+            a.Email = "asd";
             return Json(a);
         }
 
@@ -27,6 +28,12 @@ namespace CPFilmsRaiting.Controllers
         public IActionResult GetRole()
         {
             return Ok("{a: 'Ваша роль: администратор'}");
+        }
+
+        UnitOfWork _unitOfWork;
+        public ValuesController(UnitOfWork unitOfWork)
+        {
+            _unitOfWork = unitOfWork;
         }
 
         ///////////////////////////////////////////////
