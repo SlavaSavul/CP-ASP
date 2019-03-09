@@ -24,13 +24,6 @@ namespace CPFilmsRaiting.Controllers
             _unitOfWork = unitOfWork;
         }
 
-        public IActionResult Index()
-        {
-            return View();
-        }
-
-
-
         [HttpPost("/registration")]
         public async Task Registration([FromBody]ApplicationUser user)
         {
