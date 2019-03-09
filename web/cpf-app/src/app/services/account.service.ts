@@ -20,6 +20,7 @@ export class AccountService {
     .subscribe(
       (data: any) => {
         localStorage.setItem('token', data.access_token);
+        localStorage.setItem('user', data.username);
         this.router.navigate(['/']);
       },
       (error: any) => {
@@ -32,6 +33,7 @@ export class AccountService {
     .subscribe(
       (data: any) => {
         localStorage.setItem('token', data.access_token);
+        localStorage.setItem('user', data.username);
         this.router.navigate(['/']);
       },
       (error: any) => {
