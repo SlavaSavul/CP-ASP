@@ -14,51 +14,23 @@ namespace CPFilmsRaiting.Controllers
     [DisableCors]
     public class ValuesController : Controller
     {
-        [Authorize]
-        [Route("getlogin")]
-        public JsonResult GetLogin()
-        {
-            ApplicationUser a = new ApplicationUser();
-            a.Email = "asd";
-            return Json(a);
-        }
-
-        [Authorize(Roles = "admin")]
-        [Route("getrole")]
-        public IActionResult GetRole()
-        {
-            return Ok("{a: 'Ваша роль: администратор'}");
-        }
-
-        UnitOfWork _unitOfWork;
-        public ValuesController(UnitOfWork unitOfWork)
-        {
-            _unitOfWork = unitOfWork;
-        }
-
-        ///////////////////////////////////////////////
-
-        // GET api/values
         [HttpGet]
         public IEnumerable<string> Get()
         {
             return new string[] { "value1", "value2" };
         }
 
-        // GET api/values/5
         [HttpGet("{id}")]
         public string Get(int id)
         {
             return "value";
         }
 
-        // POST api/values
         [HttpPost]
         public void Post([FromBody]string value)
         {
         }
 
-        // PUT api/values/5
         [HttpPut("{id}")]
         public void Put(int id, [FromBody]string value)
         {

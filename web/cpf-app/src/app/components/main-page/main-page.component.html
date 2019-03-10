@@ -1,3 +1,62 @@
-<p>
-  main-page works!
-</p>
+<!-- 
+<div class="container">
+  <div class="list-group">
+    <a *ngFor="let film of films" href="{{film.name}}" class="list-group-item list-group-item-action">
+      {{ film.id }}
+      <img style="height: 100px; width: 100px;" 
+      src="https://avatars.mds.yandex.net/get-pdb/477388/a887cad8-bfa9-4071-baef-789a8805f37e/s1200?webp=false"/>
+    </a>
+  </div>
+
+  <ol class="list-counter-circle">
+    <li>Lorem ipsum dolor sit amet</li>
+    <li>Facilisis in pretium nisl aliquet</li>
+    <li>Nulla volutpat aliquam velit</li>
+  </ol>
+</div> -->
+
+<div class="container" style="margin-bottom: 5%">
+  <div class="card" *ngFor="let film of films">
+    <img class="card-img-top" style="height: 30%; width: 30%; margin: 2%" src="https://avatars.mds.yandex.net/get-pdb/477388/a887cad8-bfa9-4071-baef-789a8805f37e/s1200?webp=false" alt="">
+    <div class="card-body" style="display: inline-block">
+       <h5 class="card-title">{{ film.name }}</h5>
+       <p class="card-text">
+          {{ film.description }}
+       </p>
+       <!-- <a href="#" class="btn btn-primary">Go Somewhere</a> -->
+    </div>
+  </div>
+
+  <div class="row row-no-gutters">
+    <div class="col-xs-6 col-md-4"></div>
+    <div class="col-xs-6 col-md-4">
+      <div >
+        <button [disabled]="this.page === 1" type="button" (click)="previousPage()" class="btn btn-secondary" style="margin-right: 10px">Previous</button>
+        <button type="button" (click)="nextPage()" class="btn btn-secondary">Next</button>
+      </div>
+    </div>
+    <div class="col-xs-6 col-md-4"></div>
+  </div>
+</div>
+  
+
+<!-- <div class="container-fluid">
+	<div class="row">
+		<div class="col-md-12 listing-block">
+        <div class="media">
+            <div class="fav-box"><i class="fa fa-heart-o" aria-hidden="true"></i>
+            </div>
+              <img class="d-flex align-self-start" src="https://images.pexels.com/photos/186077/pexels-photo-186077.jpeg?h=350&auto=compress&cs=tinysrgb" alt="Generic placeholder image">
+              <div class="media-body pl-3">
+                <div class="price">$799,000<small>New York</small></div>
+                <div class="stats">
+                    <span><i class="fa fa-arrows-alt"></i>1678 Sq ft</span>
+                    <span><i class="fa fa-bath"></i>2 Beadrooms</span>
+                </div>
+                <div class="address">4062 Walnut Hill Drive
+            Cincinnati</div>
+              </div>
+            </div>
+		</div>
+	</div>
+</div> -->

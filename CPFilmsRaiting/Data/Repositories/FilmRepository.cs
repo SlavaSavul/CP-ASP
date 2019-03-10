@@ -37,7 +37,7 @@ namespace CPFilmsRaiting.Data.Repositories
 
         public IEnumerable<FilmModel> GetAll()
         {
-            throw new NotImplementedException();
+            return _context.Films;
         }
 
         public void Update(FilmModel item)

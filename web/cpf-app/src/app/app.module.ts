@@ -14,6 +14,8 @@ import { ExternalService } from './services/external.service';
 import { ToastrModule } from 'ngx-toastr';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CommonModule } from '@angular/common';
+import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
+import { FilmsService } from './services/films.service';
 
 export const httpInterceptorProviders = [
   { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
@@ -25,6 +27,7 @@ export const httpInterceptorProviders = [
     RegistrationComponent,
     LoginComponent,
     MainPageComponent,
+    PageNotFoundComponent,
   ],
   imports: [
     BrowserModule,
@@ -39,7 +42,8 @@ export const httpInterceptorProviders = [
     httpInterceptorProviders,
     AuthInterceptor,
     AccountService,
-    ExternalService
+    ExternalService,
+    FilmsService
   ],
   bootstrap: [AppComponent]
 })

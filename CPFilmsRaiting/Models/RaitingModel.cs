@@ -10,7 +10,7 @@ namespace CPFilmsRaiting.Models
         public string Id { get; set; }
         public string UserId { get; set; }
         public string FilmId { get; set; }
-        public string Value { get; set; }
+        public int Value { get; set; }
 
         public ApplicationUser User { get; set; }
         public FilmModel Film { get; set; }
