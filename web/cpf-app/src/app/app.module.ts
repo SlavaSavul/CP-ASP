@@ -16,6 +16,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CommonModule } from '@angular/common';
 import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
 import { FilmsService } from './services/films.service';
+import { FilmComponent } from './components/film/film.component';
 
 export const httpInterceptorProviders = [
   { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
@@ -28,6 +29,7 @@ export const httpInterceptorProviders = [
     LoginComponent,
     MainPageComponent,
     PageNotFoundComponent,
+    FilmComponent,
   ],
   imports: [
     BrowserModule,

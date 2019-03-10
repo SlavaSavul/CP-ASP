@@ -15,4 +15,8 @@ export class FilmsService {
   getAll(params) {
    return this.http.get(`${this.externalService.getURL()}/api/films`, { params });
   }
+
+  get(id: string){
+    return this.http.get(`${this.externalService.getURL()}/api/films/${id}`);
+  }
 }

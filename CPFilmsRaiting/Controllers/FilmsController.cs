@@ -7,6 +7,7 @@ using CPFilmsRaiting.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Primitives;
 
 namespace CPFilmsRaiting.Controllers
 {
@@ -25,7 +26,10 @@ namespace CPFilmsRaiting.Controllers
         public IEnumerable<FilmModel> Get()
         {
             IEnumerable<FilmModel> films = _unitOfWork.Films.GetAll();
-            if (Request.Query["page"] != "" && Request.Query["limit"] != "")
+            if (
+                !StringValues.IsNullOrEmpty(Request.Query["page"]) && 
+                !StringValues.IsNullOrEmpty(Request.Query["limit"])
+            )
             {
                 int page = int.Parse(Request.Query["page"]);
                 int limit = int.Parse(Request.Query["limit"]);
@@ -36,9 +40,9 @@ namespace CPFilmsRaiting.Controllers
         }
 
         [HttpGet("{id}")]
-        public IEnumerable<FilmModel> Get(int id)
+        public FilmModel Get(string id)
         {
-            return _unitOfWork.Films.GetAll();
+            return _unitOfWork.Films.Get(id);
         }
     }
 }
