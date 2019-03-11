@@ -1,0 +1,22 @@
+<div class="row row-no-gutters" style="margin: 2%">
+    <div class="col-xs-6 ">
+      <img style="height: 80%; width: 80%" src="{{this.editFimlForm.controls['posterURL'].value}}"/>
+    </div>
+    <div class="col-xs-6 ">
+      <form [formGroup]="editFimlForm" (ngSubmit)="onSubmit()">
+          <div class="form-group">
+            <label >Name</label>
+            <input class="form-control" formControlName="name"/>
+          </div>
+          <div class="form-group">
+            <label>Description</label>
+            <textarea  class="form-control" formControlName="description"></textarea>
+          </div>
+          <div class="form-group">
+            <label>Poster URL</label>
+            <input  class="form-control" formControlName="posterURL"/>
+          </div>
+          <button [disabled]='editFimlForm.invalid' class="btn btn-default">Save</button>
+        </form>
+    </div>
+  </div>

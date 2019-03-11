@@ -29,11 +29,11 @@ namespace CPFilmsRaiting.Controllers
         {
             if (!ModelState.IsValid)
             {
-               await WriteResponseError("Invalid model validation", "400");
+               await WriteResponseError("Invalid model validation", 400);
             }
             else if (_unitOfWork.Users.GetByEmail(user.Email) != null)
             {
-                await WriteResponseError("Such email exists", "400");
+                await WriteResponseError("Such email exists", 400);
             }
             else
             {
@@ -53,21 +53,17 @@ namespace CPFilmsRaiting.Controllers
             }
             else
             {
-                await WriteResponseError("Invalid email or password", "400");
+                await WriteResponseError("Invalid email or password", 400);
             }
         }
 
-        private async Task WriteResponseError(string message, string status)
+        private async Task WriteResponseError(string message, int status)
         {
             var response = new
             {
-                error = new
-                {
-                    status,
-                    message
-                }
+                message
             };
-
+            Response.StatusCode = status;
             Response.ContentType = "application/json";
             await Response.WriteAsync(JsonConvert.SerializeObject(
                     response,
@@ -112,7 +108,9 @@ namespace CPFilmsRaiting.Controllers
                     notBefore: now,
                     claims: identity.Claims,
                     expires: now.Add(TimeSpan.FromMinutes(AuthOptions.LIFETIME)),
-                    signingCredentials: new SigningCredentials(AuthOptions.GetSymmetricSecurityKey(), SecurityAlgorithms.HmacSha256));
+                    signingCredentials: new SigningCredentials(
+                        AuthOptions.GetSymmetricSecurityKey(), 
+                        SecurityAlgorithms.HmacSha256));
             var encodedJwt = new JwtSecurityTokenHandler().WriteToken(jwt);
             return jwt;
         }

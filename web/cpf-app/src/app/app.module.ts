@@ -18,6 +18,7 @@ import { PageNotFoundComponent } from './components/page-not-found/page-not-foun
 import { FilmsService } from './services/films.service';
 import { FilmComponent } from './components/film/film.component';
 import { CreateFilmComponent } from './components/create-film/create-film.component';
+import { EditFilmComponent } from './components/edit-film/edit-film.component';
 
 export const httpInterceptorProviders = [
   { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
@@ -32,6 +33,7 @@ export const httpInterceptorProviders = [
     PageNotFoundComponent,
     FilmComponent,
     CreateFilmComponent,
+    EditFilmComponent,
   ],
   imports: [
     BrowserModule,

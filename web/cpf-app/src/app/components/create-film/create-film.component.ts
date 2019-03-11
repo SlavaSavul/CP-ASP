@@ -33,13 +33,12 @@ export class CreateFilmComponent implements OnInit {
       .subscribe(
         (film: Film) => {
           this.filmService.createFilm(film)
-          .subscribe((response: any) => {
-              if(response.data){
-                this.toastr.success('Created');
-              }
-              else if(response.error){
-                this.toastr.error(response.error.message);
-              }
+          .subscribe(
+            (response: any) => {
+              this.toastr.success(`${response.data.name} created!`);
+            },
+            (response) => {
+              this.toastr.error(`${response.error.message}`);
             });
         }
       );

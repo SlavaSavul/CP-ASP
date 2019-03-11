@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Primitives;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 
 namespace CPFilmsRaiting.Controllers
 {
@@ -56,20 +57,33 @@ namespace CPFilmsRaiting.Controllers
             }
             else
             {
-                WriteResponseError("Already exists");
+                WriteResponseError("Already exists", 400);
             }
         }
 
-        private void WriteResponseError(string message)
+        [HttpPut]
+        public void Put([FromBody]FilmModel film)
         {
+            _unitOfWork.Films.Update(film);
+            if (film.Id != null)
+            {
+                WriteResponseData(film);
+            }
+            else
+            {
+                WriteResponseError("Error", 400);
+            }
+        }
+
+        private void WriteResponseError(string message, int statusCode)
+        {
+            Response.StatusCode = statusCode;
             Response.ContentType = "application/json";
             var response = new
-            {
-               error = new
-               {
-                    message
-               }
+            {            
+                message
             };
+
             Response.WriteAsync(JsonConvert.SerializeObject(response));
         }
 
@@ -80,7 +94,10 @@ namespace CPFilmsRaiting.Controllers
             {
                 data = film
             };
-            Response.WriteAsync(JsonConvert.SerializeObject(response));
+            var serializerSettings = new JsonSerializerSettings();
+            serializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+            Response.WriteAsync(JsonConvert.SerializeObject(response, serializerSettings));
         }
+
     }
 }

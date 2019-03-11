@@ -24,4 +24,8 @@ export class FilmsService {
   createFilm(film: Film){
     return this.http.post(`${this.externalService.getURL()}/api/films/`, film);
   }
+
+  updateFilm(film: Film){
+    return this.http.put(`${this.externalService.getURL()}/api/films/`, film);
+  }
 }

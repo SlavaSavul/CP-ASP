@@ -25,33 +25,35 @@ export class AccountService {
     this.http.post(`${this.externalService.getURL()}/registration`, data, this.options)
     .subscribe(
       (response: any) => {
-        if(response.error) {
-          this.toastr.error(response.error.message, 'Authenticate error');
-        } else if(response.data){          
-          localStorage.setItem('token', response.data.access_token);
-          localStorage.setItem('user', response.data.username);
-          this.router.navigate(['/']);
-        }
+        localStorage.setItem('token', response.data.access_token);
+        localStorage.setItem('user', response.data.username);
+        this.router.navigate(['/']);
       },
-      (error: any) => {
-        this.toastr.error(error.message, 'Authenticate error');
+      (response) => {
+      this.toastr.error(response.error.message, 'Authenticate error');
     });
   }
 
   login(data){
     this.http.post(`${this.externalService.getURL()}/login`, data, this.options)
     .subscribe(
-      (response: any) => {
-        if(response.error) {
-          this.toastr.error(response.error.message, 'Authenticate error');
-        } else if(response.data){          
-          localStorage.setItem('token', response.data.access_token);
-          localStorage.setItem('user', response.data.username);
-          this.router.navigate(['/']);
-        }
-      },
-      (error: any) => {
-        this.toastr.error(error.message, 'Authenticate error');
+    //   (response: any) => {
+    //     if(response.error) {
+    //       this.toastr.error(response.error.message, 'Authenticate error');
+    //     } else if(response.data){          
+    //      
+    //     }
+    //   },
+    //   (error: any) => {
+    //     this.toastr.error(error.message, 'Authenticate error');
+    // }
+    (response: any) => {
+      localStorage.setItem('token', response.data.access_token);
+      localStorage.setItem('user', response.data.username);
+      this.router.navigate(['/']);
+    },
+    (response) => {
+      this.toastr.error(response.error.message, 'Authenticate error');
     });
   }
 
