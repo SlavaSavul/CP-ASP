@@ -6,8 +6,10 @@ using CPFilmsRaiting.Data;
 using CPFilmsRaiting.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Primitives;
+using Newtonsoft.Json;
 
 namespace CPFilmsRaiting.Controllers
 {
@@ -43,6 +45,42 @@ namespace CPFilmsRaiting.Controllers
         public FilmModel Get(string id)
         {
             return _unitOfWork.Films.Get(id);
+        }
+
+        [HttpPost]
+        public void Post([FromBody]FilmModel film)
+        {
+            _unitOfWork.Films.Create(film);
+            if (film.Id != null) {
+                WriteResponseData(film);
+            }
+            else
+            {
+                WriteResponseError("Already exists");
+            }
+        }
+
+        private void WriteResponseError(string message)
+        {
+            Response.ContentType = "application/json";
+            var response = new
+            {
+               error = new
+               {
+                    message
+               }
+            };
+            Response.WriteAsync(JsonConvert.SerializeObject(response));
+        }
+
+        private void WriteResponseData(FilmModel film)
+        {
+            Response.ContentType = "application/json";
+            var response = new
+            {
+                data = film
+            };
+            Response.WriteAsync(JsonConvert.SerializeObject(response));
         }
     }
 }

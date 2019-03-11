@@ -18,8 +18,11 @@ namespace CPFilmsRaiting.Data.Repositories
 
         public void Create(FilmModel item)
         {
-            _context.Films.Add(item);
-            _context.SaveChanges();
+            if (_context.Films.FirstOrDefault(film => film.Name == item.Name) == null)
+            {
+                _context.Films.Add(item);
+                _context.SaveChanges();
+            }
         }
 
         public void Delete(string id)
