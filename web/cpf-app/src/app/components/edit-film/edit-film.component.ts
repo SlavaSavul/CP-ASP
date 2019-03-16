@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { FilmsService } from 'src/app/services/films.service';
-import { Film } from '../models/film.model';
+import { Film } from '../../models/film.model';
 import { FormGroup, Validators, FormBuilder } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { debounceTime } from 'rxjs/operators';
@@ -14,10 +14,10 @@ import { ErrorMessageService } from 'src/app/services/error-message.service';
   templateUrl: './edit-film.component.html',
   styleUrls: ['./edit-film.component.scss']
 })
-export class EditFilmComponent implements OnInit, CanComponentDeactivate {
+export class EditFilmComponent implements OnInit, CanComponentDeactivate, OnDestroy {
   film: Film = new Film();
   editFimlForm: FormGroup;
-  eventEmiter = new Subject();
+  eventEmitter = new Subject();
 
   constructor(
     private route: ActivatedRoute,
@@ -39,7 +39,7 @@ export class EditFilmComponent implements OnInit, CanComponentDeactivate {
         });
     });
 
-    this.eventEmiter
+    this.eventEmitter
       .pipe(debounceTime(500))
       .subscribe(
         (film: Film) => {
@@ -47,6 +47,7 @@ export class EditFilmComponent implements OnInit, CanComponentDeactivate {
           .subscribe(
             (response: any) => {
               this.toastr.success(`${response.data.name} updated!`);
+              this.editFimlForm.markAsPristine();
             },
             (response) => {
               this.errorMessageService.sendError(response, 'Update film error');
@@ -63,7 +64,7 @@ export class EditFilmComponent implements OnInit, CanComponentDeactivate {
       posterURL: this.editFimlForm.controls['posterURL'].value
     } as Film;
 
-    this.eventEmiter.next(film);
+    this.eventEmitter.next(film);
   }
 
   canDeactivate() {
@@ -73,5 +74,9 @@ export class EditFilmComponent implements OnInit, CanComponentDeactivate {
     }
 
     return true;
+  }
+
+  ngOnDestroy(){
+    this.eventEmitter.unsubscribe();
   }
 }

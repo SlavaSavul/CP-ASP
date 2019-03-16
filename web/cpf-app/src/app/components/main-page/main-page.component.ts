@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FilmsService } from 'src/app/services/films.service';
-import { Film } from '../models/film.model';
+import { Film } from '../../models/film.model';
 import { RouterStateSnapshot, ActivatedRoute, Router } from '@angular/router';
+import { AccountService } from 'src/app/services/account.service';
 
 @Component({
   selector: 'app-main-page',
@@ -13,7 +14,8 @@ export class MainPageComponent implements OnInit {
   constructor(
     private filmsService: FilmsService, 
     private activatedRoute: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private accountService: AccountService
     ) { }
   films: Film[] = [];
   page = 1;

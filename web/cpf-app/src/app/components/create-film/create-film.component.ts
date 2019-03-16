@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { FilmsService } from 'src/app/services/films.service';
-import { Film } from '../models/film.model';
+import { Film } from '../../models/film.model';
 import { ToastrService } from 'ngx-toastr';
 import { Observable, Subject } from 'rxjs';
 import { debounceTime, map } from 'rxjs/operators';
@@ -13,9 +13,9 @@ import { ErrorMessageService } from 'src/app/services/error-message.service';
   templateUrl: './create-film.component.html',
   styleUrls: ['./create-film.component.scss']
 })
-export class CreateFilmComponent implements OnInit, CanComponentDeactivate {
+export class CreateFilmComponent implements OnInit, CanComponentDeactivate, OnDestroy {
   createFimlForm: FormGroup;
-  eventEmiter = new Subject();
+  eventEmitter = new Subject();
 
   constructor(
     private formBuilder: FormBuilder, 
@@ -31,7 +31,7 @@ export class CreateFilmComponent implements OnInit, CanComponentDeactivate {
       posterURL: ['', [Validators.required]],
     });
 
-    this.eventEmiter
+    this.eventEmitter
       .pipe(debounceTime(500))
       .subscribe(
         (film: Film) => {
@@ -39,6 +39,7 @@ export class CreateFilmComponent implements OnInit, CanComponentDeactivate {
           .subscribe(
             (response: any) => {
               this.toastr.success(`${response.data.name} created!`);
+              this.createFimlForm.markAsPristine();
             },
             (response) => {
               this.errorMessageService.sendError(response, 'Create film error');
@@ -54,7 +55,7 @@ export class CreateFilmComponent implements OnInit, CanComponentDeactivate {
       posterURL: this.createFimlForm.controls['posterURL'].value
     } as Film;
 
-    this.eventEmiter.next(film);
+    this.eventEmitter.next(film);
   }
 
   canDeactivate() {
@@ -63,5 +64,9 @@ export class CreateFilmComponent implements OnInit, CanComponentDeactivate {
       return confirm('Discard changes for Film?');
     }
     return true; 
+  }
+
+  ngOnDestroy() {
+    this.eventEmitter.unsubscribe();
   }
 }

@@ -71,4 +71,9 @@ export class AccountService {
   getRole() {
     return localStorage.getItem('role');
   }
+
+  isAdmin() {
+    const role = localStorage.getItem('role');
+    return role ? role === 'admin' : false
+  }
 }
