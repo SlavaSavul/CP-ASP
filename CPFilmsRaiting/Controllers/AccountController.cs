@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Net;
@@ -27,21 +28,36 @@ namespace CPFilmsRaiting.Controllers
         [HttpPost("/registration")]
         public async Task Registration([FromBody]ApplicationUser user)
         {
-            if (!ModelState.IsValid)
+            ApplicationUser newUser = new ApplicationUser() {
+                Email = user.Email,
+                Password = user.Password,
+                Role = "user"
+            };
+            if (!isValid(newUser))
             {
                await WriteResponseError("Invalid model validation", 400);
             }
-            else if (_unitOfWork.Users.GetByEmail(user.Email) != null)
+            else if (_unitOfWork.Users.GetByEmail(newUser.Email) != null)
             {
                 await WriteResponseError("Such email exists", 400);
             }
             else
             {
-                user.Role = "user";
-                _unitOfWork.Users.Create(user);
+                _unitOfWork.Users.Create(newUser);
 
-                await WriteResponseData(user);
+                await WriteResponseData(newUser);
             }
+        }
+
+        private bool isValid(ApplicationUser user)
+        {
+            var results = new List<ValidationResult>();
+            var context = new ValidationContext(user);
+            if (!Validator.TryValidateObject(user, context, results, true))
+            {
+                return false;
+            }
+            return true;
         }
 
         [HttpPost("/login")]
@@ -87,7 +103,8 @@ namespace CPFilmsRaiting.Controllers
                     data = new
                     {
                         access_token = encodedJwt,
-                        username = identity.Name
+                        username = identity.Name,
+                        role = _unitOfWork.Users.GetByEmail(user.Email).Role
                     }
                 };
 
@@ -99,7 +116,7 @@ namespace CPFilmsRaiting.Controllers
             }
         }
 
-        private JwtSecurityToken CreateJWTToken(ApplicationUser user, ClaimsIdentity identity)
+        private string CreateJWTToken(ApplicationUser user, ClaimsIdentity identity)
         {
             var now = DateTime.UtcNow;
             var jwt = new JwtSecurityToken(
@@ -112,7 +129,7 @@ namespace CPFilmsRaiting.Controllers
                         AuthOptions.GetSymmetricSecurityKey(), 
                         SecurityAlgorithms.HmacSha256));
             var encodedJwt = new JwtSecurityTokenHandler().WriteToken(jwt);
-            return jwt;
+            return encodedJwt;
         }
 
         private ClaimsIdentity GetIdentity(string username, string password)

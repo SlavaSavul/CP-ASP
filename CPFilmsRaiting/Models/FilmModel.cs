@@ -20,6 +20,13 @@ namespace CPFilmsRaiting.Models
         [Required]
         public string PosterURL { get; set; }
 
+        [Required]
+        public DateTime Date { get; set; }
+
+        [Required]
+        public double IMDbRaiting { get; set; }
+
+        public List<GenreModel> Genres { get; set; }
         public List<CommentModel> Comments { get; set; }
         public List<RaitingModel> Raitings { get; set; }
     }

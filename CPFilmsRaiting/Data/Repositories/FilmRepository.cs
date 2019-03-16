@@ -35,6 +35,7 @@ namespace CPFilmsRaiting.Data.Repositories
             return _context.Films
                 .Include(film => film.Comments)
                 .Include(film => film.Raitings)
+                .Include(film => film.Genres)
                 .FirstOrDefault(film => film.Id == id);
         }
 
@@ -45,7 +46,14 @@ namespace CPFilmsRaiting.Data.Repositories
 
         public void Update(FilmModel item)
         {
-            throw new NotImplementedException();
+            FilmModel film = _context.Films.Find(item.Id);
+            film.Name = item.Name;
+            film.Description = item.Description;
+            film.Date = item.Date;
+            film.IMDbRaiting = item.IMDbRaiting;
+            film.PosterURL = item.PosterURL;
+
+            _context.SaveChanges();
         }
     }
 }

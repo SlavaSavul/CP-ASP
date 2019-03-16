@@ -11,9 +11,10 @@ using System;
 namespace CPFilmsRaiting.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190315200516_restrictions")]
+    partial class restrictions
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -31,8 +32,7 @@ namespace CPFilmsRaiting.Migrations
                     b.Property<string>("Password")
                         .IsRequired();
 
-                    b.Property<string>("Role")
-                        .IsRequired();
+                    b.Property<string>("Role");
 
                     b.HasKey("Id");
 

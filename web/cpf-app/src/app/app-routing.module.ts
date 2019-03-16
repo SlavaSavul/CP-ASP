@@ -14,7 +14,9 @@ const routes: Routes = [
   { path: 'film/:id', component: FilmComponent },
   { path: 'createfilm', component: CreateFilmComponent },
   { path: 'editfilm/:id', component: EditFilmComponent },
-  { path: '', component: MainPageComponent },
+  { path: 'mainpage/:page', component: MainPageComponent },
+  { path: '', redirectTo: 'mainpage/1', pathMatch: 'full' },
+  { path: 'notfound', component: PageNotFoundComponent },
   { path: '**', component: PageNotFoundComponent },
 ];
 

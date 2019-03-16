@@ -16,6 +16,7 @@ namespace CPFilmsRaiting.Controllers
 {
     [Route("api/films")]
     [DisableCors]
+    [Authorize(Roles = "admin")]
     public class FilmsController : Controller
     {
         UnitOfWork _unitOfWork { get; set; }
@@ -26,20 +27,46 @@ namespace CPFilmsRaiting.Controllers
         }
 
         [HttpGet]
-        public IEnumerable<FilmModel> Get()
+        public void Get()
         {
+           
+            int page = -1;
+            int limit = -1;
+            int count = 0;
             IEnumerable<FilmModel> films = _unitOfWork.Films.GetAll();
+            IEnumerable<FilmModel> result = films.ToList();
+            count = films.Count();
+
             if (
                 !StringValues.IsNullOrEmpty(Request.Query["page"]) && 
                 !StringValues.IsNullOrEmpty(Request.Query["limit"])
             )
             {
-                int page = int.Parse(Request.Query["page"]);
-                int limit = int.Parse(Request.Query["limit"]);
+                page = int.Parse(Request.Query["page"]);
+                limit = int.Parse(Request.Query["limit"]);
 
-                return films.Skip((page-1) * limit).Take(limit);
+                result = films.Skip((page-1) * limit).Take(limit);
             }
-            return films;
+
+            if (page < 1 || limit < 1 || result.Count() < 1)
+            {
+                WriteResponseError("Not found", 400);
+            }
+            else
+            {
+                var response = new
+                {
+                    films = result,
+                    metaData = new
+                    {
+                        page,
+                        limit,
+                        count
+                    }
+                };
+
+                WriteResponseData(response);
+            }
         }
 
         [HttpGet("{id}")]
@@ -53,7 +80,11 @@ namespace CPFilmsRaiting.Controllers
         {
             _unitOfWork.Films.Create(film);
             if (film.Id != null) {
-                WriteResponseData(film);
+                var response = new
+                {
+                    data = film
+                };
+                WriteResponseData(response);
             }
             else
             {
@@ -67,7 +98,11 @@ namespace CPFilmsRaiting.Controllers
             _unitOfWork.Films.Update(film);
             if (film.Id != null)
             {
-                WriteResponseData(film);
+                var response = new
+                {
+                    data = film
+                };
+                WriteResponseData(response);
             }
             else
             {
@@ -87,13 +122,10 @@ namespace CPFilmsRaiting.Controllers
             Response.WriteAsync(JsonConvert.SerializeObject(response));
         }
 
-        private void WriteResponseData(FilmModel film)
+        private void WriteResponseData(object response)
         {
             Response.ContentType = "application/json";
-            var response = new
-            {
-                data = film
-            };
+           
             var serializerSettings = new JsonSerializerSettings();
             serializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
             Response.WriteAsync(JsonConvert.SerializeObject(response, serializerSettings));

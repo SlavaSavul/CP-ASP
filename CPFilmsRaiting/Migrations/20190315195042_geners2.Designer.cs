@@ -11,9 +11,10 @@ using System;
 namespace CPFilmsRaiting.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190315195042_geners2")]
+    partial class geners2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -31,8 +32,7 @@ namespace CPFilmsRaiting.Migrations
                     b.Property<string>("Password")
                         .IsRequired();
 
-                    b.Property<string>("Role")
-                        .IsRequired();
+                    b.Property<string>("Role");
 
                     b.HasKey("Id");
 
@@ -44,16 +44,11 @@ namespace CPFilmsRaiting.Migrations
                     b.Property<string>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<DateTime>("Date");
+                    b.Property<string>("Description");
 
-                    b.Property<string>("Description")
-                        .IsRequired();
+                    b.Property<string>("FilmId");
 
-                    b.Property<string>("FilmId")
-                        .IsRequired();
-
-                    b.Property<string>("UserId")
-                        .IsRequired();
+                    b.Property<string>("UserId");
 
                     b.HasKey("Id");
 
@@ -89,11 +84,18 @@ namespace CPFilmsRaiting.Migrations
 
             modelBuilder.Entity("CPFilmsRaiting.Models.GenreModel", b =>
                 {
-                    b.Property<string>("FilmId");
+                    b.Property<string>("Id")
+                        .ValueGeneratedOnAdd();
 
-                    b.Property<string>("Genre");
+                    b.Property<string>("FilmId")
+                        .IsRequired();
 
-                    b.HasKey("FilmId", "Genre");
+                    b.Property<string>("Genre")
+                        .IsRequired();
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("FilmId");
 
                     b.ToTable("Genres");
                 });
@@ -103,11 +105,9 @@ namespace CPFilmsRaiting.Migrations
                     b.Property<string>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("FilmId")
-                        .IsRequired();
+                    b.Property<string>("FilmId");
 
-                    b.Property<string>("UserId")
-                        .IsRequired();
+                    b.Property<string>("UserId");
 
                     b.Property<int>("Value");
 
@@ -124,13 +124,11 @@ namespace CPFilmsRaiting.Migrations
                 {
                     b.HasOne("CPFilmsRaiting.Models.FilmModel", "Film")
                         .WithMany("Comments")
-                        .HasForeignKey("FilmId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("FilmId");
 
                     b.HasOne("CPFilmsRaiting.Models.ApplicationUser", "User")
                         .WithMany("Comments")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("UserId");
                 });
 
             modelBuilder.Entity("CPFilmsRaiting.Models.GenreModel", b =>
@@ -145,13 +143,11 @@ namespace CPFilmsRaiting.Migrations
                 {
                     b.HasOne("CPFilmsRaiting.Models.FilmModel", "Film")
                         .WithMany("Raitings")
-                        .HasForeignKey("FilmId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("FilmId");
 
                     b.HasOne("CPFilmsRaiting.Models.ApplicationUser", "User")
                         .WithMany("Raitings")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("UserId");
                 });
 #pragma warning restore 612, 618
         }

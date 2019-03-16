@@ -27,6 +27,7 @@ export class AccountService {
       (response: any) => {
         localStorage.setItem('token', response.data.access_token);
         localStorage.setItem('user', response.data.username);
+        localStorage.setItem('role', response.data.role);
         this.router.navigate(['/']);
       },
       (response) => {
@@ -37,19 +38,10 @@ export class AccountService {
   login(data){
     this.http.post(`${this.externalService.getURL()}/login`, data, this.options)
     .subscribe(
-    //   (response: any) => {
-    //     if(response.error) {
-    //       this.toastr.error(response.error.message, 'Authenticate error');
-    //     } else if(response.data){          
-    //      
-    //     }
-    //   },
-    //   (error: any) => {
-    //     this.toastr.error(error.message, 'Authenticate error');
-    // }
     (response: any) => {
       localStorage.setItem('token', response.data.access_token);
       localStorage.setItem('user', response.data.username);
+      localStorage.setItem('role', response.data.role);
       this.router.navigate(['/']);
     },
     (response) => {
@@ -67,10 +59,14 @@ export class AccountService {
   logout(){
     localStorage.removeItem('token');
     localStorage.removeItem('user');
+    localStorage.removeItem('role');
   }
 
   getEmail() {
     return localStorage.getItem('user');
   }
 
+  getRole() {
+    return localStorage.getItem('role');
+  }
 }

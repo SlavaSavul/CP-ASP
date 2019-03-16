@@ -32,33 +32,48 @@
   <div class="row row-no-gutters">
     <div class="col-xs-6 col-md-4"></div>
     <div class="col-xs-6 col-md-4">
-      <div >
-        <button [disabled]="this.page === 1" type="button" (click)="previousPage()" class="btn btn-secondary" style="margin-right: 10px">Previous</button>
-        <button type="button" (click)="nextPage()" class="btn btn-secondary">Next</button>
+      <div class="form-inline">
+        <a 
+          *ngIf="previousPage > 0"
+          routerLink="/mainpage/{{ previousPage }}" 
+          class="btn btn-secondary" style="margin-right: 10px">Previous</a>
+          <a routerLinkActive="active"
+            routerLink="/mainpage/{{ i + 1 }}" 
+            *ngFor="let in of counterPage(); let i = index" 
+            style="display: inline; margin-right: 10px; cursor: pointer;">
+            {{ i + 1}}
+          </a>
+        <a  *ngIf="lastPage > page"
+         routerLink="/mainpage/{{ nextPage }}" 
+        class="btn btn-secondary">Next</a>
       </div>
     </div>
     <div class="col-xs-6 col-md-4"></div>
   </div>
-</div>
-  
+  </div>
 
-<!-- <div class="container-fluid">
-	<div class="row">
-		<div class="col-md-12 listing-block">
-        <div class="media">
-            <div class="fav-box"><i class="fa fa-heart-o" aria-hidden="true"></i>
-            </div>
-              <img class="d-flex align-self-start" src="https://images.pexels.com/photos/186077/pexels-photo-186077.jpeg?h=350&auto=compress&cs=tinysrgb" alt="Generic placeholder image">
-              <div class="media-body pl-3">
-                <div class="price">$799,000<small>New York</small></div>
-                <div class="stats">
-                    <span><i class="fa fa-arrows-alt"></i>1678 Sq ft</span>
-                    <span><i class="fa fa-bath"></i>2 Beadrooms</span>
-                </div>
-                <div class="address">4062 Walnut Hill Drive
-            Cincinnati</div>
-              </div>
-            </div>
-		</div>
-	</div>
+
+
+
+<!-- 
+<div class="row row-no-gutters">
+  <div class="col-xs-6 col-md-4"></div>
+  <div class="col-xs-6 col-md-4">
+    <div class="form-inline">
+      <a 
+        [disabled]="true"
+        routerLink="/mainpage/{{ previousPage }}" 
+        class="btn btn-secondary" style="margin-right: 10px">Previous</a>
+        <a routerLinkActive="active"
+          routerLink="/mainpage/{{ i + 1 }}" 
+          *ngFor="let in of counterPage(); let i = index" 
+          style="display: inline; margin-right: 10px; cursor: pointer;">
+          {{ i + 1}}
+        </a>
+      <a routerLink="/mainpage/{{ nextPage }}" 
+      class="btn btn-secondary">Next</a>
+    </div>
+  </div>
+  <div class="col-xs-6 col-md-4"></div>
+</div>
 </div> -->

@@ -62,5 +62,4 @@ export class EditFilmComponent implements OnInit {
 
     this.eventEmiter.next(film);
   }
-
 }

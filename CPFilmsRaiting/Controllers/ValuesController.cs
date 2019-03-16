@@ -14,6 +14,15 @@ namespace CPFilmsRaiting.Controllers
     [DisableCors]
     public class ValuesController : Controller
     {
+        UnitOfWork _unitOfWork { get; set; }
+
+        public ValuesController(UnitOfWork unitOfWork)
+        {
+            _unitOfWork = unitOfWork;
+        }
+
+        //////////////////////////////////////////
+
         [HttpGet]
         public IEnumerable<string> Get()
         {

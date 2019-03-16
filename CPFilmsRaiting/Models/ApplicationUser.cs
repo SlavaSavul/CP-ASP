@@ -8,6 +8,7 @@ namespace CPFilmsRaiting.Models
 {
     public class ApplicationUser
     {
+        [Key]
         public string Id { get; set; }
 
         [Required]
@@ -19,6 +20,7 @@ namespace CPFilmsRaiting.Models
         [RegularExpression(@"^([a-z0-9]){4,8}$", ErrorMessage = "Invalid password")]
         public string Password { get; set; }
 
+        [Required]
         public string Role { get; set; }
 
         public List<CommentModel> Comments { get; set; }
