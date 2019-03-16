@@ -5,20 +5,23 @@ import { Film } from '../models/film.model';
 import { ToastrService } from 'ngx-toastr';
 import { Observable, Subject } from 'rxjs';
 import { debounceTime, map } from 'rxjs/operators';
+import { CanComponentDeactivate } from 'src/app/services/can-deactivate-guard.service';
+import { ErrorMessageService } from 'src/app/services/error-message.service';
 
 @Component({
   selector: 'app-create-film',
   templateUrl: './create-film.component.html',
   styleUrls: ['./create-film.component.scss']
 })
-export class CreateFilmComponent implements OnInit {
+export class CreateFilmComponent implements OnInit, CanComponentDeactivate {
   createFimlForm: FormGroup;
   eventEmiter = new Subject();
 
   constructor(
     private formBuilder: FormBuilder, 
     private filmService: FilmsService,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private errorMessageService: ErrorMessageService
     ) { }
 
   ngOnInit() {
@@ -38,7 +41,7 @@ export class CreateFilmComponent implements OnInit {
               this.toastr.success(`${response.data.name} created!`);
             },
             (response) => {
-              this.toastr.error(`${response.error.message}`);
+              this.errorMessageService.sendError(response, 'Create film error');
             });
         }
       );
@@ -52,5 +55,13 @@ export class CreateFilmComponent implements OnInit {
     } as Film;
 
     this.eventEmiter.next(film);
+  }
+
+  canDeactivate() {
+    if (this.createFimlForm.dirty) {
+
+      return confirm('Discard changes for Film?');
+    }
+    return true; 
   }
 }

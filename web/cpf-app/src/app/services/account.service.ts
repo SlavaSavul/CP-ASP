@@ -4,6 +4,7 @@ import { HttpClient} from '@angular/common/http';
 import { ExternalService } from './external.service';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
+import { ErrorMessageService } from './error-message.service';
 
 
 @Injectable()
@@ -18,7 +19,8 @@ export class AccountService {
     private http: HttpClient,
     private externalService: ExternalService,
     private router: Router,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private errorMessageService: ErrorMessageService
   ){}
 
   register(data){
@@ -31,7 +33,7 @@ export class AccountService {
         this.router.navigate(['/']);
       },
       (response) => {
-      this.toastr.error(response.error.message, 'Authenticate error');
+        this.errorMessageService.sendError(response, 'Authenticate error');
     });
   }
 
@@ -45,7 +47,7 @@ export class AccountService {
       this.router.navigate(['/']);
     },
     (response) => {
-      this.toastr.error(response.error.message, 'Authenticate error');
+      this.errorMessageService.sendError(response, 'Authenticate error');
     });
   }
 

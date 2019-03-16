@@ -16,7 +16,6 @@ namespace CPFilmsRaiting.Controllers
 {
     [Route("api/films")]
     [DisableCors]
-    [Authorize(Roles = "admin")]
     public class FilmsController : Controller
     {
         UnitOfWork _unitOfWork { get; set; }
@@ -76,6 +75,7 @@ namespace CPFilmsRaiting.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "admin")]
         public void Post([FromBody]FilmModel film)
         {
             _unitOfWork.Films.Create(film);
@@ -93,6 +93,7 @@ namespace CPFilmsRaiting.Controllers
         }
 
         [HttpPut]
+        [Authorize(Roles = "admin")]
         public void Put([FromBody]FilmModel film)
         {
             _unitOfWork.Films.Update(film);

@@ -7,13 +7,15 @@ import { PageNotFoundComponent } from './components/page-not-found/page-not-foun
 import { FilmComponent } from './components/film/film.component';
 import { CreateFilmComponent } from './components/create-film/create-film.component';
 import { EditFilmComponent } from './components/edit-film/edit-film.component';
+import { CanDeactivateGuard } from './services/can-deactivate-guard.service';
+import { CanActivateGuard } from './services/can-activate-guard.service';
 
 const routes: Routes = [
   { path: 'signup', component: RegistrationComponent },
   { path: 'signin', component: LoginComponent },
   { path: 'film/:id', component: FilmComponent },
-  { path: 'createfilm', component: CreateFilmComponent },
-  { path: 'editfilm/:id', component: EditFilmComponent },
+  { path: 'createfilm', component: CreateFilmComponent, canActivate: [CanActivateGuard], canDeactivate: [CanDeactivateGuard] },
+  { path: 'editfilm/:id', component: EditFilmComponent, canDeactivate: [CanDeactivateGuard] },
   { path: 'mainpage/:page', component: MainPageComponent },
   { path: '', redirectTo: 'mainpage/1', pathMatch: 'full' },
   { path: 'notfound', component: PageNotFoundComponent },

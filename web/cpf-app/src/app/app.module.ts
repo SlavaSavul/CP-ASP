@@ -19,6 +19,9 @@ import { FilmsService } from './services/films.service';
 import { FilmComponent } from './components/film/film.component';
 import { CreateFilmComponent } from './components/create-film/create-film.component';
 import { EditFilmComponent } from './components/edit-film/edit-film.component';
+import { CanDeactivateGuard } from './services/can-deactivate-guard.service';
+import { CanActivateGuard } from './services/can-activate-guard.service';
+import { ErrorMessageService } from './services/error-message.service';
 
 export const httpInterceptorProviders = [
   { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
@@ -49,7 +52,10 @@ export const httpInterceptorProviders = [
     AuthInterceptor,
     AccountService,
     ExternalService,
-    FilmsService
+    FilmsService,
+    CanDeactivateGuard,
+    CanActivateGuard,
+    ErrorMessageService
   ],
   bootstrap: [AppComponent]
 })

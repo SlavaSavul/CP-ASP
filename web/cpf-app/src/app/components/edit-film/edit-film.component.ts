@@ -6,13 +6,15 @@ import { FormGroup, Validators, FormBuilder } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { debounceTime } from 'rxjs/operators';
 import { Subject } from 'rxjs';
+import { CanComponentDeactivate } from 'src/app/services/can-deactivate-guard.service';
+import { ErrorMessageService } from 'src/app/services/error-message.service';
 
 @Component({
   selector: 'app-edit-film',
   templateUrl: './edit-film.component.html',
   styleUrls: ['./edit-film.component.scss']
 })
-export class EditFilmComponent implements OnInit {
+export class EditFilmComponent implements OnInit, CanComponentDeactivate {
   film: Film = new Film();
   editFimlForm: FormGroup;
   eventEmiter = new Subject();
@@ -21,7 +23,8 @@ export class EditFilmComponent implements OnInit {
     private route: ActivatedRoute,
     private filmsService: FilmsService,
     private formBuilder: FormBuilder,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private errorMessageService: ErrorMessageService
     ) { }
     
   ngOnInit() {
@@ -37,18 +40,18 @@ export class EditFilmComponent implements OnInit {
     });
 
     this.eventEmiter
-    .pipe(debounceTime(500))
-    .subscribe(
-      (film: Film) => {
-        this.filmsService.updateFilm(film)
-        .subscribe(
-          (response: any) => {
-            this.toastr.success(`${response.data.name} updated!`);
-          },
-          (response) => {
-            this.toastr.error(`${response.error.message}`);
-          });
-      }
+      .pipe(debounceTime(500))
+      .subscribe(
+        (film: Film) => {
+          this.filmsService.updateFilm(film)
+          .subscribe(
+            (response: any) => {
+              this.toastr.success(`${response.data.name} updated!`);
+            },
+            (response) => {
+              this.errorMessageService.sendError(response, 'Update film error');
+            });
+        }
     );
   }
 
@@ -61,5 +64,14 @@ export class EditFilmComponent implements OnInit {
     } as Film;
 
     this.eventEmiter.next(film);
+  }
+
+  canDeactivate() {
+    if(this.editFimlForm.dirty) {
+
+      return confirm('Discard changes for Film?');
+    }
+
+    return true;
   }
 }
