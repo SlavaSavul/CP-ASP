@@ -17,6 +17,5 @@ namespace CPFilmsRaiting.Models
         //[Required]
         //public string FilmId { get; set; }
 
-         public List<FilmGenresModel> Genres { get; set; }
     }
 }

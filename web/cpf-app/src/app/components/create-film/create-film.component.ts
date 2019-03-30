@@ -1,13 +1,14 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { FilmsService } from 'src/app/services/films.service';
+import { FilmsService } from '../../services/films.service';
 import { Film } from '../../models/film.model';
 import { ToastrService } from 'ngx-toastr';
 import { Observable, Subject } from 'rxjs';
 import { debounceTime, map } from 'rxjs/operators';
-import { CanComponentDeactivate } from 'src/app/services/can-deactivate-guard.service';
-import { ErrorMessageService } from 'src/app/services/error-message.service';
+import { CanComponentDeactivate } from '../../services/can-deactivate-guard.service';
+import { ErrorMessageService } from '../../services/error-message.service';
 import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
+import { FilmFormComponent } from '../film-form/film-form.component';
 
 @Component({
   selector: 'app-create-film',
@@ -17,61 +18,35 @@ import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
 export class CreateFilmComponent implements OnInit, CanComponentDeactivate, OnDestroy {
   createFimlForm: FormGroup;
   eventEmitter = new Subject();
+  film = new Film();
+  @ViewChild('filmForm') filmForm: FilmFormComponent;
 
   constructor(
-    private formBuilder: FormBuilder, 
     private filmService: FilmsService,
     private toastr: ToastrService,
     private errorMessageService: ErrorMessageService
     ) { }
 
-  ngOnInit() {
-    this.createFimlForm = this.formBuilder.group({
-      name: ['', [Validators.required]],
-      description: ['', [Validators.required]],
-      posterURL: ['', [Validators.required]],
-    });
+  ngOnInit() { } 
 
-    this.eventEmitter
-      .pipe(debounceTime(500))
-      .subscribe(
-        (film: Film) => {
-          this.createFilm(film)
-         }
-      );
-  }
-
-  createFilm(film: Film){
-    this.filmService.createFilm(film)
-      .subscribe(
-        (response: HttpResponse<any>) => {
-          console.log(response);
-          this.toastr.success(`${response.body.film.name} created!`);
-          this.createFimlForm.markAsPristine();
-        },
-        (error: HttpErrorResponse) => {
-          console.log(error);
-          this.errorMessageService.sendError(error, 'Create film error');
-        }
-      );
-  }
-
-  onSubmit() {
-    const film = {
-      name: this.createFimlForm.controls['name'].value,
-      description: this.createFimlForm.controls['description'].value,
-      posterURL: this.createFimlForm.controls['posterURL'].value
-    } as Film;
-
-    this.eventEmitter.next(film);
+  onSave(event) {
+    console.log(event);
+    this.filmService.createFilm(event)
+    .subscribe(
+      (response: HttpResponse<any>) => {
+        console.log(response);
+        this.toastr.success(`${response.body.film.name} created!`);
+        this.filmForm.markAsPristine();
+      },
+      (error: HttpErrorResponse) => {
+        console.log(error);
+        this.errorMessageService.sendError(error, 'Create film error');
+      }
+    );
   }
 
   canDeactivate() {
-    if (this.createFimlForm.dirty) {
-
-      return confirm('Discard changes for Film?');
-    }
-    return true; 
+   return this.filmForm.canDeactivate();
   }
 
   ngOnDestroy() {

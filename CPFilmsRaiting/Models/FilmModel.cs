@@ -29,9 +29,6 @@ namespace CPFilmsRaiting.Models
        // public List<FilmGenresModel> Genres { get; set; }
         public List<CommentModel> Comments { get; set; }
         public List<RaitingModel> Raitings { get; set; }
-
         public List<GenreModel> Genres { get; set; }
-
-      
     }
 }
