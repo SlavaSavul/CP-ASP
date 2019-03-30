@@ -1,9 +1,8 @@
 import { Injectable } from '@angular/core';
-import { HttpHeaders, HttpErrorResponse } from '@angular/common/http';
+import { HttpHeaders, HttpErrorResponse, HttpResponse } from '@angular/common/http';
 import { HttpClient} from '@angular/common/http';
 import { ExternalService } from './external.service';
 import { Router } from '@angular/router';
-import { ToastrService } from 'ngx-toastr';
 import { ErrorMessageService } from './error-message.service';
 
 
@@ -13,41 +12,42 @@ export class AccountService {
   httpHeaders = new HttpHeaders({
     'Content-Type' : 'application/json; charset=utf-8'
   }); 
-  options = { headers: this.httpHeaders };
   
   constructor(
     private http: HttpClient,
     private externalService: ExternalService,
     private router: Router,
-    private toastr: ToastrService,
     private errorMessageService: ErrorMessageService
   ){}
 
   register(data){
-    this.http.post(`${this.externalService.getURL()}/registration`, data, this.options)
+    this.http.post(`${this.externalService.getURL()}/registration`, data, { headers: this.httpHeaders, observe: 'response'})
     .subscribe(
-      (response: any) => {
-        localStorage.setItem('token', response.data.access_token);
-        localStorage.setItem('user', response.data.username);
-        localStorage.setItem('role', response.data.role);
+      (response: HttpResponse<any>) => {
+        console.log(response);
+        localStorage.setItem('token', response.body.data.access_token);
+        localStorage.setItem('user', response.body.data.username);
+        localStorage.setItem('role', response.body.data.role);
         this.router.navigate(['/']);
       },
-      (response) => {
-        this.errorMessageService.sendError(response, 'Authenticate error');
+      (error: HttpErrorResponse) => {
+        console.log(error);
+        this.errorMessageService.sendError(error, 'Authenticate error');
     });
   }
 
   login(data){
-    this.http.post(`${this.externalService.getURL()}/login`, data, this.options)
+    this.http.post(`${this.externalService.getURL()}/login`, data, { headers: this.httpHeaders, observe: 'response'})
     .subscribe(
-    (response: any) => {
-      localStorage.setItem('token', response.data.access_token);
-      localStorage.setItem('user', response.data.username);
-      localStorage.setItem('role', response.data.role);
+    (response: HttpResponse<any>) => {
+      localStorage.setItem('token', response.body.data.access_token);
+      localStorage.setItem('user', response.body.data.username);
+      localStorage.setItem('role', response.body.data.role);
       this.router.navigate(['/']);
     },
-    (response) => {
-      this.errorMessageService.sendError(response, 'Authenticate error');
+    (error: HttpErrorResponse) => {
+      console.log(error);
+      this.errorMessageService.sendError(error, 'Authenticate error');
     });
   }
 

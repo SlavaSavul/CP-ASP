@@ -7,6 +7,7 @@ import { Observable, Subject } from 'rxjs';
 import { debounceTime, map } from 'rxjs/operators';
 import { CanComponentDeactivate } from 'src/app/services/can-deactivate-guard.service';
 import { ErrorMessageService } from 'src/app/services/error-message.service';
+import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-create-film',
@@ -35,15 +36,22 @@ export class CreateFilmComponent implements OnInit, CanComponentDeactivate, OnDe
       .pipe(debounceTime(500))
       .subscribe(
         (film: Film) => {
-          this.filmService.createFilm(film)
-          .subscribe(
-            (response: any) => {
-              this.toastr.success(`${response.data.name} created!`);
-              this.createFimlForm.markAsPristine();
-            },
-            (response) => {
-              this.errorMessageService.sendError(response, 'Create film error');
-            });
+          this.createFilm(film)
+         }
+      );
+  }
+
+  createFilm(film: Film){
+    this.filmService.createFilm(film)
+      .subscribe(
+        (response: HttpResponse<any>) => {
+          console.log(response);
+          this.toastr.success(`${response.body.film.name} created!`);
+          this.createFimlForm.markAsPristine();
+        },
+        (error: HttpErrorResponse) => {
+          console.log(error);
+          this.errorMessageService.sendError(error, 'Create film error');
         }
       );
   }

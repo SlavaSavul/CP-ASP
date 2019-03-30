@@ -10,10 +10,7 @@ import { AccountService } from '../../services/account.service';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  title = 'cpf-app';
-  token: string;
-  
   constructor(
-    private accountService: AccountService
+    public accountService: AccountService
   ){}
 }

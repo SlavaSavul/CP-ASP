@@ -14,7 +14,7 @@ export class FilmsService {
   ) { }
 
   getAll(params) {
-   return this.http.get(`${this.externalService.getURL()}/api/films`, { params });
+   return this.http.get(`${this.externalService.getURL()}/api/films`, { params, observe: 'response' });
   }
 
   get(id: string){
@@ -22,10 +22,10 @@ export class FilmsService {
   }
 
   createFilm(film: Film){
-    return this.http.post(`${this.externalService.getURL()}/api/films/`, film);
+    return this.http.post(`${this.externalService.getURL()}/api/films/`, film, { observe: 'response' });
   }
 
   updateFilm(film: Film){
-    return this.http.put(`${this.externalService.getURL()}/api/films/`, film);
+    return this.http.put(`${this.externalService.getURL()}/api/films/`, film, { observe: 'response' });
   }
 }

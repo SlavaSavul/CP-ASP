@@ -3,6 +3,7 @@ import { FilmsService } from 'src/app/services/films.service';
 import { Film } from '../../models/film.model';
 import { RouterStateSnapshot, ActivatedRoute, Router } from '@angular/router';
 import { AccountService } from 'src/app/services/account.service';
+import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-main-page',
@@ -22,25 +23,6 @@ export class MainPageComponent implements OnInit {
   limit = 2;
   metaData: any;
 
-  counterPage() {
-    if(this.metaData){
-      return new Array(Math.round(this.lastPage));
-    }
-    return new Array();
-  }
-
-  get nextPage() {
-    return +this.page + 1;
-  }
-
-  get previousPage() {
-    return +this.page - 1;
-  }
-
-  get lastPage() {
-    return this.metaData ? this.metaData.count / this.metaData.limit : 0;
-  }
-
   ngOnInit() {
     this.activatedRoute.params.subscribe(
       (params) => {
@@ -51,15 +33,28 @@ export class MainPageComponent implements OnInit {
 
   sendRequest(params: { page: number, limit: number }) {
     this.filmsService.getAll(params).subscribe(
-      (data: any) => {
-        if(data.films.length !== 0) {
-          this.films = data.films;
-          this.metaData = data.metaData;
+      (response: HttpResponse<any>) => {
+        console.log(response);
+        if(response.body.films.length !== 0) {
+          this.films = response.body.films;
+          this.metaData = response.body.metaData;
         }
       },
-      (error: any) => {
+      (error: HttpErrorResponse) => {
         this.router.navigate(['/notfound']);
       }
     );
+  }
+
+  paginate(event) {
+    this.router.navigate([`/mainpage/${event.page + 1}`]);
+  }
+
+  getLimit() {
+    return this.metaData ? this.metaData.limit : 0;
+  }
+
+  getCount() {
+    return this.metaData ? this.metaData.count : 0;
   }
 }

@@ -3,7 +3,7 @@
       <img style="height: 80%; width: 80%" src="{{this.editFimlForm.controls['posterURL'].value}}"/>
     </div>
     <div class="col-xs-6 ">
-      <form [formGroup]="editFimlForm" (ngSubmit)="onSubmit()">
+      <form [formGroup]="editFimlForm" >
           <div class="form-group">
             <label >Name</label>
             <input class="form-control" formControlName="name"/>
@@ -16,7 +16,31 @@
             <label>Poster URL</label>
             <input  class="form-control" formControlName="posterURL"/>
           </div>
-          <button [disabled]='editFimlForm.invalid' class="btn btn-default">Save</button>
+          <div class="form-group">
+            <label>IMDb raiting</label>
+            <input  class="form-control" formControlName="imDbRaiting"/>
+          </div>
+          <div class="form-group">
+            <label>Date</label>
+            <input  class="form-control" formControlName="date" type="date"/>
+          </div>
+
+          <label>Genres</label>
+          <div formArrayName="genres"> 
+            <div class="form-inline">
+              <input class="form-control" style="width:200px; border-top-right-radius: 0;border-bottom-right-radius: 0;" #genreInput>
+              <input type="button" class="form-control" style=" border-top-left-radius: 0; border-bottom-left-radius: 0;"
+               (click)="onGenreAdd(genreInput.value)" value="Add">
+            </div>
+            <hr>
+            <div *ngFor = "let genre of genresFormArray.controls; let idx = index" [formGroupName]="idx" class="form-inline" >
+              <input class="form-control" readonly formControlName="genre" style="width:200px; border-top-right-radius: 0;border-bottom-right-radius: 0;">
+              <input type="button" class="form-control" style=" border-top-left-radius: 0; border-bottom-left-radius: 0;" 
+              (click)="onGenreDelete(genre)" value="X">
+            </div>
+          </div>
+          <br>
+          <button [disabled]='editFimlForm.invalid' class="btn btn-default" (click)="onSubmit()">Save</button>
         </form>
     </div>
   </div>

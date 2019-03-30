@@ -1,5 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
+import {PaginatorModule} from 'primeng/paginator';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './components/app/app.component';
@@ -45,6 +46,7 @@ export const httpInterceptorProviders = [
     ReactiveFormsModule,
     BrowserAnimationsModule,
     CommonModule,
+    PaginatorModule,
     ToastrModule.forRoot(),
   ],
   providers: [

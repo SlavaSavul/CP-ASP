@@ -28,7 +28,15 @@ namespace CPFilmsRaiting.Controllers
         [HttpGet]
         public void Get()
         {
-           
+            //////////////////////////////
+            //FilmModel film = _unitOfWork.Films.Get("01c0977b-0465-4806-802d-6a97bc1eb688");
+            //GenreModel g1 = new GenreModel() { Genre = "g1" };
+            //GenreModel g2 = new GenreModel() { Genre = "g2" };
+            //film.Genres = new List<GenreModel>();
+            //film.Genres.Add(g1);
+            //film.Genres.Add(g2);
+            //_unitOfWork.Films.Update(film);
+            //////////////////////////////
             int page = -1;
             int limit = -1;
             int count = 0;
@@ -82,7 +90,7 @@ namespace CPFilmsRaiting.Controllers
             if (film.Id != null) {
                 var response = new
                 {
-                    data = film
+                    film
                 };
                 WriteResponseData(response);
             }

@@ -6,17 +6,19 @@ using System.Threading.Tasks;
 
 namespace CPFilmsRaiting.Models
 {
-    public class GenreModel
+    public class FilmGenresModel
     {
         [Required]
         public string Id { get; set; }
 
         [Required]
-        public string Genre { get; set; }
+        public string GenreId { get; set; }
 
-        //[Required]
-        //public string FilmId { get; set; }
+        [Required]
+        public string FilmId { get; set; }
 
-         public List<FilmGenresModel> Genres { get; set; }
+        public FilmModel Film { get; set; }
+        public GenreModel Genre { get; set; }
+
     }
 }

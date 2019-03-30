@@ -11,9 +11,10 @@ using System;
 namespace CPFilmsRaiting.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190330075447_aaas4")]
+    partial class aaas4
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -81,7 +82,7 @@ namespace CPFilmsRaiting.Migrations
 
                     b.HasIndex("GenreId");
 
-                    b.ToTable("FilmGenresModel");
+                    b.ToTable("FilmGenres");
                 });
 
             modelBuilder.Entity("CPFilmsRaiting.Models.FilmModel", b =>

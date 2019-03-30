@@ -11,9 +11,10 @@ using System;
 namespace CPFilmsRaiting.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190330081038_aaas8")]
+    partial class aaas8
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -64,26 +65,6 @@ namespace CPFilmsRaiting.Migrations
                     b.ToTable("Comments");
                 });
 
-            modelBuilder.Entity("CPFilmsRaiting.Models.FilmGenresModel", b =>
-                {
-                    b.Property<string>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<string>("FilmId")
-                        .IsRequired();
-
-                    b.Property<string>("GenreId")
-                        .IsRequired();
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("FilmId");
-
-                    b.HasIndex("GenreId");
-
-                    b.ToTable("FilmGenresModel");
-                });
-
             modelBuilder.Entity("CPFilmsRaiting.Models.FilmModel", b =>
                 {
                     b.Property<string>("Id")
@@ -105,23 +86,6 @@ namespace CPFilmsRaiting.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Films");
-                });
-
-            modelBuilder.Entity("CPFilmsRaiting.Models.GenreModel", b =>
-                {
-                    b.Property<string>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<string>("FilmModelId");
-
-                    b.Property<string>("Genre")
-                        .IsRequired();
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("FilmModelId");
-
-                    b.ToTable("Genres");
                 });
 
             modelBuilder.Entity("CPFilmsRaiting.Models.RaitingModel", b =>
@@ -157,26 +121,6 @@ namespace CPFilmsRaiting.Migrations
                         .WithMany("Comments")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("CPFilmsRaiting.Models.FilmGenresModel", b =>
-                {
-                    b.HasOne("CPFilmsRaiting.Models.FilmModel", "Film")
-                        .WithMany()
-                        .HasForeignKey("FilmId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("CPFilmsRaiting.Models.GenreModel", "Genre")
-                        .WithMany("Genres")
-                        .HasForeignKey("GenreId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("CPFilmsRaiting.Models.GenreModel", b =>
-                {
-                    b.HasOne("CPFilmsRaiting.Models.FilmModel")
-                        .WithMany("Genres")
-                        .HasForeignKey("FilmModelId");
                 });
 
             modelBuilder.Entity("CPFilmsRaiting.Models.RaitingModel", b =>

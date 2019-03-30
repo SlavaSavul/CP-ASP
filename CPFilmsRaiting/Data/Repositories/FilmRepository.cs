@@ -46,12 +46,19 @@ namespace CPFilmsRaiting.Data.Repositories
 
         public void Update(FilmModel item)
         {
-            FilmModel film = _context.Films.Find(item.Id);
+            FilmModel film = _context.Films
+                .Include(f => f.Comments)
+                .Include(f => f.Raitings)
+                .Include(f => f.Genres)
+                .FirstOrDefault(f => f.Id == item.Id);
             film.Name = item.Name;
             film.Description = item.Description;
             film.Date = item.Date;
             film.IMDbRaiting = item.IMDbRaiting;
             film.PosterURL = item.PosterURL;
+            film.IMDbRaiting = item.IMDbRaiting;
+            film.Date = item.Date;
+            film.Genres = item.Genres;
 
             _context.SaveChanges();
         }

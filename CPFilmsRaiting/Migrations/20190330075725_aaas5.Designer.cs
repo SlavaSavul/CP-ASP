@@ -11,9 +11,10 @@ using System;
 namespace CPFilmsRaiting.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190330075725_aaas5")]
+    partial class aaas5
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -81,7 +82,7 @@ namespace CPFilmsRaiting.Migrations
 
                     b.HasIndex("GenreId");
 
-                    b.ToTable("FilmGenresModel");
+                    b.ToTable("FilmGenres");
                 });
 
             modelBuilder.Entity("CPFilmsRaiting.Models.FilmModel", b =>
@@ -112,14 +113,10 @@ namespace CPFilmsRaiting.Migrations
                     b.Property<string>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("FilmModelId");
-
                     b.Property<string>("Genre")
                         .IsRequired();
 
                     b.HasKey("Id");
-
-                    b.HasIndex("FilmModelId");
 
                     b.ToTable("Genres");
                 });
@@ -162,7 +159,7 @@ namespace CPFilmsRaiting.Migrations
             modelBuilder.Entity("CPFilmsRaiting.Models.FilmGenresModel", b =>
                 {
                     b.HasOne("CPFilmsRaiting.Models.FilmModel", "Film")
-                        .WithMany()
+                        .WithMany("Genres")
                         .HasForeignKey("FilmId")
                         .OnDelete(DeleteBehavior.Cascade);
 
@@ -170,13 +167,6 @@ namespace CPFilmsRaiting.Migrations
                         .WithMany("Genres")
                         .HasForeignKey("GenreId")
                         .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("CPFilmsRaiting.Models.GenreModel", b =>
-                {
-                    b.HasOne("CPFilmsRaiting.Models.FilmModel")
-                        .WithMany("Genres")
-                        .HasForeignKey("FilmModelId");
                 });
 
             modelBuilder.Entity("CPFilmsRaiting.Models.RaitingModel", b =>

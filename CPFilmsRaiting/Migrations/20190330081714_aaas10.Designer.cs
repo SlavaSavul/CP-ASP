@@ -11,9 +11,10 @@ using System;
 namespace CPFilmsRaiting.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190330081714_aaas10")]
+    partial class aaas10
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -111,6 +112,9 @@ namespace CPFilmsRaiting.Migrations
                 {
                     b.Property<string>("Id")
                         .ValueGeneratedOnAdd();
+
+                    b.Property<string>("FilmId")
+                        .IsRequired();
 
                     b.Property<string>("FilmModelId");
 

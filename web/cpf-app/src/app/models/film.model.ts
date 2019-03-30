@@ -8,4 +8,7 @@ export class Film {
     posterURL: string;
     comments: Comment[];
     raitings: Raiting[];
+    date: string;
+    imDbRaiting: string;
+    genres: any[]
 }

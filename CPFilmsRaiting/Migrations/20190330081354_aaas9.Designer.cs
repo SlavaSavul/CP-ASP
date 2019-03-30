@@ -11,9 +11,10 @@ using System;
 namespace CPFilmsRaiting.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190330081354_aaas9")]
+    partial class aaas9
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -64,26 +65,6 @@ namespace CPFilmsRaiting.Migrations
                     b.ToTable("Comments");
                 });
 
-            modelBuilder.Entity("CPFilmsRaiting.Models.FilmGenresModel", b =>
-                {
-                    b.Property<string>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<string>("FilmId")
-                        .IsRequired();
-
-                    b.Property<string>("GenreId")
-                        .IsRequired();
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("FilmId");
-
-                    b.HasIndex("GenreId");
-
-                    b.ToTable("FilmGenresModel");
-                });
-
             modelBuilder.Entity("CPFilmsRaiting.Models.FilmModel", b =>
                 {
                     b.Property<string>("Id")
@@ -111,6 +92,9 @@ namespace CPFilmsRaiting.Migrations
                 {
                     b.Property<string>("Id")
                         .ValueGeneratedOnAdd();
+
+                    b.Property<string>("FilmId")
+                        .IsRequired();
 
                     b.Property<string>("FilmModelId");
 
@@ -156,19 +140,6 @@ namespace CPFilmsRaiting.Migrations
                     b.HasOne("CPFilmsRaiting.Models.ApplicationUser", "User")
                         .WithMany("Comments")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("CPFilmsRaiting.Models.FilmGenresModel", b =>
-                {
-                    b.HasOne("CPFilmsRaiting.Models.FilmModel", "Film")
-                        .WithMany()
-                        .HasForeignKey("FilmId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("CPFilmsRaiting.Models.GenreModel", "Genre")
-                        .WithMany("Genres")
-                        .HasForeignKey("GenreId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
