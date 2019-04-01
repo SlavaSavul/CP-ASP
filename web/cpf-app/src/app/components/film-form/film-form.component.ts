@@ -6,11 +6,42 @@ import { ToastrService } from 'ngx-toastr';
 import { debounceTime } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 import { CanComponentDeactivate } from '../../services/can-deactivate-guard.service';
+import {
+  trigger,
+  state,
+  style,
+  animate,
+  transition,
+} from '@angular/animations';
 
 @Component({
   selector: 'app-film-form',
   templateUrl: './film-form.component.html',
-  styleUrls: ['./film-form.component.scss']
+  styleUrls: ['./film-form.component.scss'],
+  animations: [
+    trigger('genre', [
+      transition('void => *', [
+        style({
+          opacity: 0,
+          transform: 'translateX(-100px)'
+        }),
+        animate(300, style({
+          transform: 'translateX(0)',
+          opacity: 1
+        }))
+      ]),
+      transition('* => void', [
+        style({
+          opacity: 1,
+          transform: 'translateX(0)'
+        }),
+        animate(300, style({
+          transform: 'translateX(100px)',
+          opacity: 0
+        }))
+      ])
+    ])
+  ]
 })
 export class FilmFormComponent implements OnInit, CanComponentDeactivate, OnDestroy {
   editFimlForm: FormGroup;

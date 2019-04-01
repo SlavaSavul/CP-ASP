@@ -29,14 +29,14 @@ export class FilmsComponent implements OnInit {
   ngOnInit() {
     this.form = this.formBuilder.group({
       name: ['', [
-      //  Validators.maxLength(100)
+        Validators.maxLength(100)
       ]],
       raiting: ['', [
-      //  Validators.max(10),
-      //  Validators.min(0)
+        Validators.max(10),
+        Validators.min(0)
       ]],
       year: ['', [
-       // Validators.min(1960),
+        Validators.min(1960),
       ]],
     });
 
@@ -108,7 +108,7 @@ export class FilmsComponent implements OnInit {
         page: page ? this.page : 1, 
         limit: this.limit, 
         year: this.form.controls["year"].value,
-        name: this.form.controls["name"].value,
+        name: this.form.controls["name"].value.trim(),
         raiting: this.form.controls["raiting"].value
       });
     }

@@ -45,8 +45,8 @@
               </form>
             </div>
             <hr>
-            <div *ngFor = "let genre of genresFormArray.controls; let idx = index" [formGroupName]="idx" class="form-inline" >
-              <input class="form-control" readonly formControlName="genre" style="width:200px; border-top-right-radius: 0;border-bottom-right-radius: 0;">
+            <div [@genre] *ngFor = "let genre of genresFormArray.controls; let idx = index" [formGroupName]="idx" class="form-inline" >
+              <input class="form-control" readonly  formControlName="genre" style="width:200px; border-top-right-radius: 0;border-bottom-right-radius: 0;">
               <input type="button" class="form-control" style=" border-top-left-radius: 0; border-bottom-left-radius: 0;" 
               (click)="onGenreDelete(genre)" value="X">
             </div>
