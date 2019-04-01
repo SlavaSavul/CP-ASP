@@ -4,7 +4,8 @@
 	  <div class="collapse navbar-collapse">
 		<ul class="nav navbar-nav">
 			<li routerLinkActive="active" routerLink="/" [routerLinkActiveOptions]="{exact: true}"><a style="cursor: pointer;">Home</a></li>
-		  <li *ngIf="accountService.isAdmin()" routerLinkActive="active" routerLink="/createfilm"><a style="cursor: pointer;">Create Film</a></li>
+			<li routerLinkActive="active" routerLink="/films" [routerLinkActiveOptions]="{exact: true}"><a style="cursor: pointer;">Films</a></li>
+			<li *ngIf="accountService.isAdmin()" routerLinkActive="active" routerLink="/createfilm"><a style="cursor: pointer;">Create Film</a></li>
 		</ul>
 		<ul class="nav navbar-nav navbar-right">
 		  <ng-template [ngIf]="!accountService.isAuthenticated()" [ngIfElse]="loggedOut">

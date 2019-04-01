@@ -24,6 +24,7 @@ import { CanDeactivateGuard } from './services/can-deactivate-guard.service';
 import { CanActivateGuard } from './services/can-activate-guard.service';
 import { ErrorMessageService } from './services/error-message.service';
 import { FilmFormComponent } from './components/film-form/film-form.component';
+import { FilmsComponent } from './components/films/films.component';
 
 export const httpInterceptorProviders = [
   { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
@@ -40,6 +41,7 @@ export const httpInterceptorProviders = [
     CreateFilmComponent,
     EditFilmComponent,
     FilmFormComponent,
+    FilmsComponent,
   ],
   imports: [
     BrowserModule,

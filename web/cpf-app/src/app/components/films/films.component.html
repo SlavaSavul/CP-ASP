@@ -1,0 +1,40 @@
+<div class="container" style="widows: 100vw;">
+  <div class="row">
+    <div class="col-xs-6 col-md-4">
+      <form [formGroup]="form">
+          <label> Raiting </label>
+          <div class="form-inline">
+              <input formControlName="raiting" class="form-control" type="number" name="raiting" value="0" min="0" max="10" step="0.1">
+          </div>
+          <label> Year </label>
+          <input formControlName="year" class="form-control" type="number" name="raitingMin" value="1990" min="1960" step="1">
+          <label> Name </label>
+          <input formControlName="name" class="form-control" type="text" name="name" autocomplete="off">
+          <br>
+          <button class="form-control" (click)="onSubmit()">Search</button>
+      </form>
+     
+    </div>
+    <div class="col-xs-12 col-md-8">
+      
+        <div class="container" style="margin-bottom: 5%">
+            <div class="card" *ngFor="let film of films">
+              <a routerLink="/film/{{ film.id }}">
+                <img class="card-img-top" style="height: 20%; width: 20%; margin: 2%" src="{{ film.posterURL }}" alt="">
+              </a>
+              <div class="card-body" style="display: inline-block">
+                 <h5 class="card-title">{{ film.name }}</h5>
+                 <p class="card-text">
+                    {{ film.description }}
+                 </p>
+                 <a *ngIf="accountService.isAdmin()" routerLink="/editfilm/{{film.id}}" class="btn btn-primary">Edit</a>
+              </div>
+            </div>
+            
+          <p-paginator *ngIf="getCount() > 0; else notFound" [style]="{width: '75%'}" [rows]="getLimit()" [totalRecords]="getCount()" (onPageChange)="paginate($event)"></p-paginator>
+          <ng-template #notFound>
+            <h1>Not Found</h1>
+          </ng-template>
+    </div>
+  </div>
+</div>

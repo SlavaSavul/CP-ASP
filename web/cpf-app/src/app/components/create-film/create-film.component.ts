@@ -9,6 +9,7 @@ import { CanComponentDeactivate } from '../../services/can-deactivate-guard.serv
 import { ErrorMessageService } from '../../services/error-message.service';
 import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
 import { FilmFormComponent } from '../film-form/film-form.component';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-create-film',
@@ -24,7 +25,8 @@ export class CreateFilmComponent implements OnInit, CanComponentDeactivate, OnDe
   constructor(
     private filmService: FilmsService,
     private toastr: ToastrService,
-    private errorMessageService: ErrorMessageService
+    private errorMessageService: ErrorMessageService,
+    private router: Router,
     ) { }
 
   ngOnInit() { } 
@@ -37,6 +39,7 @@ export class CreateFilmComponent implements OnInit, CanComponentDeactivate, OnDe
         console.log(response);
         this.toastr.success(`${response.body.film.name} created!`);
         this.filmForm.markAsPristine();
+        this.router.navigate(["/"]);
       },
       (error: HttpErrorResponse) => {
         console.log(error);

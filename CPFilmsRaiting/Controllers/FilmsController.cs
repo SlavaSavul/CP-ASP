@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using CPFilmsRaiting.Data;
@@ -35,15 +36,34 @@ namespace CPFilmsRaiting.Controllers
             IEnumerable<FilmModel> result = films.ToList();
             count = films.Count();
 
+            int year = 0;
+            if (int.TryParse(Request.Query["year"].ToString(), out year) )
+            {
+                result = result.Where( f => f.Date.Year == year);
+            }
+
+            string raitingParam = Request.Query["raiting"];
+            double raiting = 0;
+            if (raitingParam != null && double.TryParse(raitingParam.Replace(".",","), out raiting))
+            {
+                result = result.Where(f => ((double)f.IMDbRaiting) >= raiting);
+            }
+
+            if (Request.Query["name"].ToString() != "")
+            {
+                result = result.Where(f => f.Name.Contains(Request.Query["name"]));
+            }
+
+            count = result.Count();
             if (
-                !StringValues.IsNullOrEmpty(Request.Query["page"]) && 
-                !StringValues.IsNullOrEmpty(Request.Query["limit"])
-            )
+               !StringValues.IsNullOrEmpty(Request.Query["page"]) &&
+               !StringValues.IsNullOrEmpty(Request.Query["limit"])
+           )
             {
                 page = int.Parse(Request.Query["page"]);
                 limit = int.Parse(Request.Query["limit"]);
 
-                result = films.Skip((page-1) * limit).Take(limit);
+                result = result.Skip((page - 1) * limit).Take(limit);
             }
 
             if (page < 1 || limit < 1 || result.Count() < 1)
