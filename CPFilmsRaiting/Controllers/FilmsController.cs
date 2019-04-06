@@ -98,13 +98,13 @@ namespace CPFilmsRaiting.Controllers
             }
         }
 
-        [Route("genres")]
         [HttpGet]
-        public List<GenreModel> GetGanres()
+        [Route("genres")]
+        public List<string> GetGanres()
         {
-            List<GenreModel> a = _unitOfWork.Films.GetAllWithInclude().SelectMany(f => f.Genres).Distinct().ToList();
+            List<GenreModel> a = _unitOfWork.Films.GetAllWithInclude().SelectMany(f => f.Genres).ToList();
 
-            return a;
+            return a.Select(g => g.Genre).Distinct().ToList();
         }
 
         [HttpGet("{id}")]

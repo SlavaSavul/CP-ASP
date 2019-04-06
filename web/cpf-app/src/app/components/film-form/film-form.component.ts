@@ -47,7 +47,7 @@ export class FilmFormComponent implements OnInit, CanComponentDeactivate, OnDest
   editFimlForm: FormGroup;
   eventEmitter = new Subject();
   _film: Film;
-
+  @ViewChild('genreInput') genreInput: any;
   @Output('onSave') eventEmitter2 = new Subject();
   @Input() set film(film) {
     if(film) {
@@ -107,11 +107,13 @@ export class FilmFormComponent implements OnInit, CanComponentDeactivate, OnDest
   }
 
   addGenre(item: Genre){
+   if(this.genreInput.valid){
     let fg = this.formBuilder.group({
       genre: [item.genre, [Validators.required]],
       id: item.id
-   });
-    this.genresFormArray.push(fg);	  
+    });
+    this.genresFormArray.push(fg);	 
+   } 
   }
 
   onGenreDelete(event) {
@@ -134,6 +136,7 @@ export class FilmFormComponent implements OnInit, CanComponentDeactivate, OnDest
   }
   
   onSubmit() {
+   if(this.editFimlForm.valid){
     const film = {
       id: this._film ? this._film.id: null,
       name: this.editFimlForm.controls['name'].value,
@@ -145,10 +148,11 @@ export class FilmFormComponent implements OnInit, CanComponentDeactivate, OnDest
     } as Film;
 
     this.eventEmitter.next(film);
+   }
   }
 
   canDeactivate() {
-    if(this.editFimlForm.dirty) {
+    if(this.editFimlForm.dirty || this.genreInput.dirty) {
 
       return confirm('Discard changes for Film?');
     }

@@ -6,6 +6,7 @@ import { AccountService } from 'src/app/services/account.service';
 import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Genre } from 'src/app/models/genre.model';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-films',
@@ -18,25 +19,26 @@ export class FilmsComponent implements OnInit {
   page = 1;
   limit = 2;
   metaData: any;
-  genres: Genre[] = [];
-  selectedGenres:  Genre[] = [];
+  genres: string[] = [];
+  selectedGenres:  string[] = [];
 
   constructor(
     private filmsService: FilmsService, 
     private activatedRoute: ActivatedRoute,
     private router: Router,
     private formBuilder: FormBuilder,
-    private accountService: AccountService
+    private accountService: AccountService,
+    private toastr: ToastrService,
     ) { }
 
   ngOnInit() {
    this.filmsService.gerGenres().subscribe( 
-     (response: HttpResponse<Genre[]>) => {
+     (response: HttpResponse<string[]>) => {
       this.genres = response.body;
      }
    );
-
-    this.createForm();
+   
+   this.createForm();
 
     this.activatedRoute.params.subscribe(
       (params) => {
@@ -44,21 +46,10 @@ export class FilmsComponent implements OnInit {
         if(!this.page) {
           this.page = 1;
         }
-        this.getFilms(this.page, this.limit);
+        this.sendWithForm(this.page, this.limit);
     });    
   }
 
-  getFilms(page: number, limit: number) {
-    if(this.form.valid){
-      this.sendRequest(page, limit, { 
-        year: this.form.controls["year"].value,
-        name: this.form.controls["name"].value.trim(),
-        raiting: this.form.controls["raiting"].value,
-        genres: this.selectedGenres.map(g => g.genre)
-      });
-    }
-  }
-  
   createForm() {
     this.form = this.formBuilder.group({
       name: ['', [
@@ -66,22 +57,32 @@ export class FilmsComponent implements OnInit {
       ]],
       raiting: ['', [
         Validators.max(10),
-        Validators.min(0)
+        Validators.min(0),
+        Validators.pattern('^[0-9]*[.]?[0-9]+$'),
+        Validators.maxLength(3)
       ]],
       year: ['', [
         Validators.min(1960),
+        Validators.max((new Date()).getFullYear()),
+        Validators.pattern('^[0-9]{4}$')
       ]],
     });
   }
 
   onSubmit() {
+    this.sendWithForm(1, this.limit);
+  }
+
+  sendWithForm(page: number, limit: number) {
     if(this.form.valid){
-      this.sendRequest(1, this.limit, { 
+      this.sendRequest(page, limit, { 
         year: this.form.controls["year"].value,
         name: this.form.controls["name"].value.trim(),
         raiting: this.form.controls["raiting"].value,
-        genres: this.selectedGenres.map(g => g.genre)
+        genres: this.selectedGenres
       });
+    }
+    else {
     }
   }
 
@@ -130,7 +131,7 @@ export class FilmsComponent implements OnInit {
     return this.metaData ? this.metaData.count : 0;
   }
 
-  selectGenre(genre: Genre) {
+  selectGenre(genre: string) {
     if(this.selectedGenres.indexOf(genre) < 0) {
       this.selectedGenres.push(genre);
     }
@@ -139,7 +140,15 @@ export class FilmsComponent implements OnInit {
     }
   }
 
-  ifgenreSelected(genre: Genre) {
+  ifgenreSelected(genre: string) {
     return this.selectedGenres.indexOf(genre) > -1;
+  }
+
+  isRaitingValid() {
+    return !this.form.controls['raiting'].errors;
+  }
+
+  isYearValid() {
+    return !this.form.controls['year'].errors;
   }
 }

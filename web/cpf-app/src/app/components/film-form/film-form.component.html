@@ -7,22 +7,31 @@
           <div class="form-group">
             <label >Name</label>
             <input class="form-control" formControlName="name"/>
+            <div [hidden]="!editFimlForm.controls['name'].errors || !editFimlForm.controls['name'].dirty" class="error-msg">Invalid name</div>
           </div>
+
           <div class="form-group">
             <label>Description</label>
             <textarea  class="form-control" formControlName="description"></textarea>
+            <div [hidden]="!editFimlForm.controls['description'].errors || !editFimlForm.controls['description'].dirty" class="error-msg">Invalid description</div>
           </div>
+
           <div class="form-group">
             <label>Poster URL</label>
             <input  class="form-control" formControlName="posterURL"/>
+            <div [hidden]="!editFimlForm.controls['posterURL'].errors || !editFimlForm.controls['posterURL'].dirty" class="error-msg">Invalid poster URL</div>
           </div>
+
           <div class="form-group">
             <label>IMDb raiting</label>
             <input  class="form-control" formControlName="imDbRaiting"/>
+            <div [hidden]="!editFimlForm.controls['imDbRaiting'].errors || !editFimlForm.controls['imDbRaiting'].dirty" class="error-msg">Invalid raiting</div>
           </div>
+
           <div class="form-group">
             <label>Date</label>
             <input  class="form-control" formControlName="date" type="date"/>
+            <div [hidden]="!editFimlForm.controls['date'].errors || !editFimlForm.controls['imDbRaiting'].dirty" class="error-msg">Invalid date</div>
           </div>
 
           <label>Genres</label>
@@ -35,13 +44,15 @@
                   ngModel 
                   #genreInput="ngModel" 
                   class="form-control" 
-                  style="width:200px; border-top-right-radius: 0;border-bottom-right-radius: 0;">
-                <input [disabled]="!genreInput.valid" 
-                  type="button" 
+                  style="width:200px; border-top-right-radius: 0;border-bottom-right-radius: 0;"
+                  autocomplete="off">
+                <input  type="button" 
                   class="form-control" 
                   style=" border-top-left-radius: 0; border-bottom-left-radius: 0;"
                   (click)="onGenreAdd(genreInput.value)" 
                   value="Add">
+                  <div [hidden]="genreInput.valid || !genreInput.dirty" class="error-msg">Invalid genre</div>
+
               </form>
             </div>
             <hr>
@@ -52,7 +63,7 @@
             </div>
           </div>
           <br>
-          <button [disabled]='editFimlForm.invalid' class="btn btn-default" (click)="onSubmit()">Save</button>
+          <button class="btn btn-default" (click)="onSubmit()">Save</button>
         </form>
     </div>
   </div>
