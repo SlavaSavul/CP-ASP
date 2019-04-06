@@ -32,7 +32,7 @@ namespace CPFilmsRaiting.Controllers
             int page = -1;
             int limit = -1;
             int count = 0;
-            IEnumerable<FilmModel> films = _unitOfWork.Films.GetAll();
+            IEnumerable<FilmModel> films = _unitOfWork.Films.GetAllWithInclude();
             IEnumerable<FilmModel> result = films.ToList();
             count = films.Count();
 
@@ -52,6 +52,17 @@ namespace CPFilmsRaiting.Controllers
             if (Request.Query["name"].ToString() != "")
             {
                 result = result.Where(f => f.Name.Contains(Request.Query["name"]));
+            }
+
+            if (Request.Query["genres"].ToString() != "")
+            {
+                List<string> genres = Request.Query["genres"].ToList();
+                result = result.Where(film => {
+                    List<string> filmGenres = film.Genres.Select(g => g.Genre).ToList();
+                    List<string> exists = filmGenres.Where(g => genres.Any(g2 => g.Equals(g2))).ToList();
+                    return exists.Count() > 0;
+                });
+
             }
 
             count = result.Count();
@@ -85,6 +96,15 @@ namespace CPFilmsRaiting.Controllers
 
                 WriteResponseData(response);
             }
+        }
+
+        [Route("genres")]
+        [HttpGet]
+        public List<GenreModel> GetGanres()
+        {
+            List<GenreModel> a = _unitOfWork.Films.GetAllWithInclude().SelectMany(f => f.Genres).Distinct().ToList();
+
+            return a;
         }
 
         [HttpGet("{id}")]

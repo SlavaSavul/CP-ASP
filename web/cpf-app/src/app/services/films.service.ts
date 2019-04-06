@@ -28,4 +28,8 @@ export class FilmsService {
   updateFilm(film: Film){
     return this.http.put(`${this.externalService.getURL()}/api/films/`, film, { observe: 'response' });
   }
+
+  gerGenres() {
+    return this.http.get(`${this.externalService.getURL()}/api/films/genres`, { observe: 'response' });
+  }
 }

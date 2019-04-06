@@ -39,6 +39,14 @@ namespace CPFilmsRaiting.Data.Repositories
                 .FirstOrDefault(film => film.Id == id);
         }
 
+        public IEnumerable<FilmModel> GetAllWithInclude()
+        {
+            return _context.Films
+                .Include(film => film.Comments)
+                .Include(film => film.Raitings)
+                .Include(film => film.Genres);
+        }
+
         public IEnumerable<FilmModel> GetAll()
         {
             return _context.Films;
