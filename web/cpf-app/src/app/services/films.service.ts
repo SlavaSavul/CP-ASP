@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient} from '@angular/common/http';
 import { ExternalService } from './external.service';
 import { Film } from '../models/film.model';
+import { Comment } from '../models/comment.model';
 
 @Injectable({
   providedIn: 'root'
@@ -18,7 +19,7 @@ export class FilmsService {
   }
 
   get(id: string){
-    return this.http.get(`${this.externalService.getURL()}/api/films/${id}`);
+    return this.http.get(`${this.externalService.getURL()}/api/films/${id}`, { observe: 'response' });
   }
 
   createFilm(film: Film){
@@ -31,5 +32,14 @@ export class FilmsService {
 
   gerGenres() {
     return this.http.get(`${this.externalService.getURL()}/api/films/genres`, { observe: 'response' });
+  }
+
+  createComment(comment: Comment) {
+
+    return this.http.post(`${this.externalService.getURL()}/api/comments/`, comment, { observe: 'response' });
+  }
+
+  getComments(id: string) {
+    return this.http.get(`${this.externalService.getURL()}/api/films/${id}/comments`, { observe: 'response' });
   }
 }

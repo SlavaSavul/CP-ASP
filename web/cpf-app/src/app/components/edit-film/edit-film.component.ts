@@ -5,7 +5,7 @@ import { Film } from '../../models/film.model';
 import { Genre } from '../../models/genre.model';
 import { FormGroup, Validators, FormBuilder, FormArray, FormControl } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
-import { debounceTime } from 'rxjs/operators';
+import { debounceTime, map } from 'rxjs/operators';
 import { Subject, Observable } from 'rxjs';
 import { CanComponentDeactivate } from '../../services/can-deactivate-guard.service';
 import { ErrorMessageService } from '../../services/error-message.service';
@@ -31,7 +31,13 @@ export class EditFilmComponent implements OnInit, CanComponentDeactivate, OnDest
     ) { }
 
   ngOnInit() {
-    this.film$ = this.filmsService.get(this.route.snapshot.params['id']);
+    this.film$ = this.filmsService.get(this.route.snapshot.params['id'])
+    .pipe(
+      map( (response: HttpResponse<any>) =>  
+      {
+        return response.body.data;
+      })
+    );
   }
 
   canDeactivate() {

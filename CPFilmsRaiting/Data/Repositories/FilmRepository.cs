@@ -32,11 +32,13 @@ namespace CPFilmsRaiting.Data.Repositories
 
         public FilmModel Get(string id)
         {
-            return _context.Films
-                .Include(film => film.Comments)
-                .Include(film => film.Raitings)
-                .Include(film => film.Genres)
-                .FirstOrDefault(film => film.Id == id);
+            FilmModel film = _context.Films
+                .Include(f => f.Comments)
+                .Include(f => f.Genres)
+                .FirstOrDefault(f => f.Id == id);
+            film.Comments = film.Comments.OrderByDescending(c => c.Date).ToList();
+            return film;
+
         }
 
         public IEnumerable<FilmModel> GetAllWithInclude()

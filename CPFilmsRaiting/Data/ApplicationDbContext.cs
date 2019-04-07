@@ -25,6 +25,7 @@ namespace CPFilmsRaiting.Data
         public DbSet<FilmModel> Films { get; set; }
         public DbSet<RaitingModel> Raiting { get; set; }
         public DbSet<GenreModel> Genres { get; set; }
-       // public DbSet<FilmGenresModel> FilmGenres { get; set; }
+
+        // public DbSet<FilmGenresModel> FilmGenres { get; set; }
     }
 }

@@ -12,4 +12,36 @@
     </div>
   </div>
   <br>
+  <hr>
+
+  <p-panel>
+    <p-header>
+      {{ getUserName() }} |
+      <span style="font-size: 60%; text-align: left; margin-left: 5px;">
+        {{ getDate() | date }}
+      </span>
+    </p-header>
+    <textarea #comment class="form-control" type="area" style="border-radius: 0; width:100%; min-width: 100%; max-width: 100%"></textarea>
+    <p-footer>
+        <button type="button" class="btn btn-success" (click)="onSendComment(comment.value)">Add</button>
+    </p-footer> 
+  </p-panel>
+  
+  <br>
+  <br>
+  <ng-container *ngFor="let comment of film.comments">
+    <p-panel>
+      <p-header>
+        {{ comment.userName }} |
+        <span style="font-size: 60%; text-align: left; margin-left: 5px;">
+          {{ comment.date | date }}
+        </span>
+      </p-header>
+        {{ comment.description }}
+    </p-panel>
+    <br>
+  </ng-container>
 </div>
+
+
+

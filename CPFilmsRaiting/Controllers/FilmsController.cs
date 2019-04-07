@@ -62,7 +62,6 @@ namespace CPFilmsRaiting.Controllers
                     List<string> exists = filmGenres.Where(g => genres.Any(g2 => g.Equals(g2))).ToList();
                     return exists.Count() > 0;
                 });
-
             }
 
             count = result.Count();
@@ -108,11 +107,15 @@ namespace CPFilmsRaiting.Controllers
         }
 
         [HttpGet("{id}")]
-        public FilmModel Get(string id)
+        public void Get(string id)
         {
-            return _unitOfWork.Films.Get(id);
+            var response = new
+            {
+                data = _unitOfWork.Films.Get(id)
+            };
+            WriteResponseData(response);
         }
-
+     
         [HttpPost]
         [Authorize(Roles = "admin")]
         public void Post([FromBody]FilmModel film)
@@ -167,8 +170,10 @@ namespace CPFilmsRaiting.Controllers
             Response.ContentType = "application/json";
            
             var serializerSettings = new JsonSerializerSettings();
+
             serializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
-            Response.WriteAsync(JsonConvert.SerializeObject(response, serializerSettings));
+            serializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+        Response.WriteAsync(JsonConvert.SerializeObject(response, serializerSettings));
         }
 
     }

@@ -20,6 +20,14 @@ namespace CPFilmsRaiting.Data.Repositories
             throw new NotImplementedException();
         }
 
+        public IEnumerable<CommentModel> GetAll(string id)
+        {
+            return _context
+                .Comments
+                .Where(c => c.FilmId == id)
+                .OrderByDescending(c => c.Date);
+        }
+
         public CommentModel Get(string id)
         {
             throw new NotImplementedException();

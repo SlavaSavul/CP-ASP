@@ -31,12 +31,12 @@
           <div class="form-group">
             <label>Date</label>
             <input  class="form-control" formControlName="date" type="date"/>
-            <div [hidden]="!editFimlForm.controls['date'].errors || !editFimlForm.controls['imDbRaiting'].dirty" class="error-msg">Invalid date</div>
+            <div [hidden]="!editFimlForm.controls['date'].errors || !editFimlForm.controls['date'].dirty" class="error-msg">Invalid date</div>
           </div>
 
           <label>Genres</label>
           <div formArrayName="genres"> 
-            <div class="form-inline">
+            <div class="form-inline"> 
               <form #form="ngForm">
                 <input required 
                   name="ganre"

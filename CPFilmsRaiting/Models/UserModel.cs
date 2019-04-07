@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace CPFilmsRaiting.Models
 {
-    public class ApplicationUser
+    public class UserModel
     {
         [Key]
         public string Id { get; set; }
@@ -19,10 +19,5 @@ namespace CPFilmsRaiting.Models
         [DataType(DataType.Password)]
         [RegularExpression(@"^([a-z0-9]){4,8}$", ErrorMessage = "Invalid password")]
         public string Password { get; set; }
-
-        [Required]
-        public string Role { get; set; }
-
-        public List<RaitingModel> Raitings { get; set; }
     }
 }
