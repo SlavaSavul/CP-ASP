@@ -115,7 +115,18 @@ namespace CPFilmsRaiting.Controllers
             };
             WriteResponseData(response);
         }
-     
+
+        [HttpGet("{id}/comments")]
+        public void GetComments(string id)
+        {
+            var response = new
+            {
+                comments = _unitOfWork.Comments.GetAll(id)
+            };
+            WriteResponseData(response);
+        }
+
+
         [HttpPost]
         [Authorize(Roles = "admin")]
         public void Post([FromBody]FilmModel film)

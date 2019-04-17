@@ -41,17 +41,6 @@ namespace CPFilmsRaiting.Controllers
             _unitOfWork.Comments.Create(comment);
         }
 
-        [HttpGet("{id}")]
-        [Route("api/films/{id}/comments")]
-        public void GetComments(string id)
-        {
-            var response = new
-            {
-                comments = _unitOfWork.Comments.GetAll(id)
-            };
-            WriteResponseData(response);
-        }
-
         private void WriteResponseData(object response)
         {
             Response.ContentType = "application/json";

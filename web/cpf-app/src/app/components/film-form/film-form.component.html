@@ -12,7 +12,7 @@
 
           <div class="form-group">
             <label>Description</label>
-            <textarea  class="form-control" formControlName="description"></textarea>
+            <textarea  class="form-control" formControlName="description" style="resize: vertical"></textarea>
             <div [hidden]="!editFimlForm.controls['description'].errors || !editFimlForm.controls['description'].dirty" class="error-msg">Invalid description</div>
           </div>
 
