@@ -44,7 +44,6 @@ namespace CPFilmsRaiting.Controllers
         private void WriteResponseData(object response)
         {
             Response.ContentType = "application/json";
-
             var serializerSettings = new JsonSerializerSettings();
 
             serializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
