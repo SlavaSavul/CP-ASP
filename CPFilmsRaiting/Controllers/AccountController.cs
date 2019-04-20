@@ -11,6 +11,8 @@ using CPFilmsRaiting.Models;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Filters;
+using Microsoft.Extensions.Primitives;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
 
@@ -20,9 +22,12 @@ namespace CPFilmsRaiting.Controllers
     public class AccountController : Controller
     {
         UnitOfWork _unitOfWork;
-        public AccountController(UnitOfWork unitOfWork)
+        private readonly IHttpContextAccessor _context;
+
+        public AccountController(UnitOfWork unitOfWork, IHttpContextAccessor context)
         {
             _unitOfWork = unitOfWork;
+            _context = context;
         }
 
         [HttpPost("/registration")]
@@ -47,6 +52,60 @@ namespace CPFilmsRaiting.Controllers
 
                 await WriteResponseData(newUser);
             }
+        }
+
+        [HttpPost("/authentication")]
+        public async Task Authentication()
+        {
+            JwtSecurityToken jwtToken = GetJwtSecurityToken();
+            if (jwtToken != null && jwtToken.ValidTo < DateTime.UtcNow)
+            {
+                string jwt = CreateJWTToken(jwtToken.Claims);
+
+                var response = new
+                {
+                    data = new
+                    {
+                        access_token = jwt
+                    }
+                };
+
+                Response.ContentType = "application/json";
+                await Response.WriteAsync(JsonConvert.SerializeObject(
+                    response,
+                    new JsonSerializerSettings { Formatting = Formatting.Indented }
+                ));
+            }
+            else
+            {
+                Response.ContentType = "application/json";
+                await Response.WriteAsync(JsonConvert.SerializeObject(
+                    new {
+                        data = new {}
+                    },
+                    new JsonSerializerSettings { Formatting = Formatting.Indented }
+                ));
+            }
+        }
+
+        public JwtSecurityToken GetJwtSecurityToken()
+        {
+            
+            StringValues authorizationHeader;
+            Request.Headers.TryGetValue("Authorization", out authorizationHeader);
+            string token = authorizationHeader.ToString().Split(" ")[1];
+
+            if (token != "null")
+            {
+                var handler = new JwtSecurityTokenHandler();
+                JwtSecurityToken jwtToken = handler.ReadJwtToken(token);
+                return jwtToken;
+            }
+            else
+            {
+                return null;
+            }
+           
         }
 
         private bool isValid(ApplicationUser user)
@@ -97,7 +156,7 @@ namespace CPFilmsRaiting.Controllers
             }
             else 
             {
-                var encodedJwt = CreateJWTToken(user, identity);
+                var encodedJwt = CreateJWTToken(identity.Claims);
                 var response = new
                 {
                     data = new
@@ -116,14 +175,14 @@ namespace CPFilmsRaiting.Controllers
             }
         }
 
-        private string CreateJWTToken(ApplicationUser user, ClaimsIdentity identity)
+        private string CreateJWTToken(IEnumerable<Claim> Claims)
         {
             var now = DateTime.UtcNow;
             var jwt = new JwtSecurityToken(
                     issuer: AuthOptions.ISSUER,
                     audience: AuthOptions.AUDIENCE,
                     notBefore: now,
-                    claims: identity.Claims,
+                    claims: Claims,
                     expires: now.Add(TimeSpan.FromMinutes(AuthOptions.LIFETIME)),
                     signingCredentials: new SigningCredentials(
                         AuthOptions.GetSymmetricSecurityKey(), 

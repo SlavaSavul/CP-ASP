@@ -27,7 +27,14 @@ namespace CPFilmsRaiting.Data.Repositories
 
         public void Delete(string id)
         {
-            throw new NotImplementedException();
+            FilmModel film = _context.Films
+               .Include(f => f.Genres)
+               .Include(f => f.Comments)
+               .FirstOrDefault(f => f.Id == id);
+            _context.Genres.RemoveRange(film.Genres);
+            _context.Comments.RemoveRange(film.Comments);
+            _context.Films.Remove(film);
+            _context.SaveChanges();
         }
 
         public FilmModel Get(string id)

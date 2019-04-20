@@ -151,4 +151,12 @@ export class FilmsComponent implements OnInit {
   isYearValid() {
     return !this.form.controls['year'].errors;
   }
+
+  delete(id: string) {
+    this.filmsService.delete(id).subscribe(
+      (response: HttpResponse<any>) => {
+        this.sendWithForm(1, this.limit);
+      }
+    );
+  }
 }

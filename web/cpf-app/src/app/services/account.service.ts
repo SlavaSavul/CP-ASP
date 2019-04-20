@@ -76,4 +76,19 @@ export class AccountService {
     const role = localStorage.getItem('role');
     return role ? role === 'admin' : false
   }
+  
+  checkLogin() {
+    this.http.post(`${this.externalService.getURL()}/authentication`, { headers: this.httpHeaders, observe: 'response'})
+    .subscribe(
+    (response: any) => {
+      if(response.data !== null && response.data.access_token ) {
+        localStorage.setItem('token', response.data.access_token);
+      }
+      console.log(response);
+    },
+    (error: HttpErrorResponse) => {
+      this.logout();
+      console.log(error);
+    });
+  }
 }

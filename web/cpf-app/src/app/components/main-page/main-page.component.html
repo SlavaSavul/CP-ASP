@@ -8,8 +8,10 @@
        <p class="card-text">
           {{ film.description }}
        </p>
-       <a *ngIf="accountService.isAdmin()" routerLink="/editfilm/{{film.id}}" class="btn btn-primary">Edit</a>
-    </div>
+       <div class="btn-group" role="group" aria-label="Basic example" *ngIf="accountService.isAdmin()">
+        <a routerLink="/editfilm/{{film.id}}" class="btn btn-primary">Edit</a>
+        <button class="btn btn-primary" (click)="delete(film.id)">Delete</button>
+     </div>    </div>
   </div>
 
 <p-paginator [rows]="getLimit()" [totalRecords]="getCount()" (onPageChange)="paginate($event)"></p-paginator>

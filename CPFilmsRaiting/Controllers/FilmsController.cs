@@ -96,6 +96,11 @@ namespace CPFilmsRaiting.Controllers
                 WriteResponseData(response);
             }
         }
+        [HttpDelete("{id}")]
+        public void Delete(string id)
+        {
+            _unitOfWork.Films.Delete(id);
+        }
 
         [HttpGet]
         [Route("genres")]

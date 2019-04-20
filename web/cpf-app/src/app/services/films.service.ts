@@ -42,4 +42,8 @@ export class FilmsService {
   getComments(id: string) {
     return this.http.get(`${this.externalService.getURL()}/api/films/${id}/comments`, { observe: 'response' });
   }
+  
+  delete(id: string){
+    return this.http.delete(`${this.externalService.getURL()}/api/films/${id}`, { observe: 'response' });
+  }
 }

@@ -57,4 +57,12 @@ export class MainPageComponent implements OnInit {
   getCount() {
     return this.metaData ? this.metaData.count : 0;
   }
+
+  delete(id: string) {
+    this.filmsService.delete(id).subscribe(
+      (response: HttpResponse<any>) => {
+        this.sendRequest({ page: 1, limit: this.limit });
+      }
+    );
+  }
 }
