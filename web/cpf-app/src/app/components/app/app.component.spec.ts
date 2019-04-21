@@ -1,35 +1,43 @@
 import { TestBed, async } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { AppComponent } from './app.component';
+import { AccountService } from 'src/app/services/account.service';
+
+class FakeAccountService {
+  checkLogin(){};
+  logout(){};
+  getEmail(){};
+  isAuthenticated(){};
+  isAdmin(){
+    return true;
+  };
+}
 
 describe('AppComponent', () => {
+  let fixture: any;
+  let app: AppComponent;
+  let service: AccountService;
+
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [
-        RouterTestingModule
+        RouterTestingModule,
       ],
       declarations: [
         AppComponent
       ],
+      providers: [
+        { provide: AccountService, useClass: FakeAccountService },
+      ]
     }).compileComponents();
+    fixture = TestBed.createComponent(AppComponent);
+    service = TestBed.get(AccountService);
+    app = fixture.debugElement.componentInstance;
+    fixture.detectChanges();
   }));
 
   it('should create the app', () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    const app = fixture.debugElement.componentInstance;
     expect(app).toBeTruthy();
   });
-
-  it(`should have as title 'cpf-app'`, () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    const app = fixture.debugElement.componentInstance;
-    expect(app.title).toEqual('cpf-app');
-  });
-
-  it('should render title in a h1 tag', () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    fixture.detectChanges();
-    const compiled = fixture.debugElement.nativeElement;
-    expect(compiled.querySelector('h1').textContent).toContain('Welcome to cpf-app!');
-  });
 });
+

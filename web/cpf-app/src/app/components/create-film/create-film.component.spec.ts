@@ -1,6 +1,30 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { CreateFilmComponent } from './create-film.component';
+import { FormsModule, ReactiveFormsModule, FormBuilder } from '@angular/forms';
+import { FilmFormComponent } from '../film-form/film-form.component';
+import { ToastrService } from 'ngx-toastr';
+import { FilmsService } from 'src/app/services/films.service';
+import { ErrorMessageService } from 'src/app/services/error-message.service';
+import { ActivatedRoute, Router } from '@angular/router';
+import { of, throwError } from 'rxjs';
+
+
+class FakeRouter {
+  navigate() {}
+}
+
+class FakeFilmsService {
+  createFilm(){}
+}
+
+class FakeErrorMessageService {
+  sendError(){};
+}
+
+class FakeToastrService {
+  success() {}
+}
 
 describe('CreateFilmComponent', () => {
   let component: CreateFilmComponent;
@@ -8,7 +32,18 @@ describe('CreateFilmComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ CreateFilmComponent ]
+      imports: [FormsModule, ReactiveFormsModule],
+      declarations: [ CreateFilmComponent, FilmFormComponent ],
+      providers: [
+        FormBuilder,
+        { provide: ToastrService, useClass: FakeToastrService },
+        { provide: FilmsService, useClass: FakeFilmsService },
+        { provide: ErrorMessageService, useClass: FakeErrorMessageService },
+        {
+          provide: Router,
+          useClass: FakeRouter
+        }
+      ]
     })
     .compileComponents();
   }));
@@ -22,4 +57,36 @@ describe('CreateFilmComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  describe('canDeactivate', () => {
+    it('', () => {
+      spyOn(component.filmForm, 'canDeactivate');
+
+      component.canDeactivate();
+
+      expect(component.filmForm.canDeactivate).toHaveBeenCalled();
+    });
+  });
+
+
+  describe('onSave', () => {
+    it('should call toastr success', async(() => {
+      spyOn(TestBed.get(FilmsService), 'createFilm').and.returnValue(of({ body: { film: { name: 'name' }}}));
+      spyOn(TestBed.get(ToastrService), 'success');
+      spyOn(TestBed.get(Router), 'navigate');
+
+      component.onSave({});
+
+      expect(TestBed.get(ToastrService).success).toHaveBeenCalled();
+    }));
+  });
+
+  it('should throw error', async(() => {
+    spyOn(TestBed.get(FilmsService), 'createFilm').and.returnValue(throwError({ body: { film: { name: 'name' }}}));
+    spyOn(TestBed.get(ErrorMessageService), 'sendError');
+
+    component.onSave({});
+
+    expect(TestBed.get(ErrorMessageService).sendError).toHaveBeenCalled();
+  }));
 });

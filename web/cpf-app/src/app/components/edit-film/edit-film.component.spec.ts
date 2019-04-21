@@ -1,14 +1,49 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { Observable, of, throwError } from 'rxjs'; 
 import { EditFilmComponent } from './edit-film.component';
+import { ActivatedRoute } from '@angular/router';
+import { FilmsService } from 'src/app/services/films.service';
+import { ErrorMessageService } from 'src/app/services/error-message.service';
+import { ToastrService } from 'ngx-toastr';
+import { FilmFormComponent } from '../film-form/film-form.component';
+import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
+
+class FakeFilmsService {
+  get(){
+    return new Observable();
+  };
+  updateFilm() {
+    return new Observable();
+  }
+}
+
+class FakeErrorMessageService {
+  sendError(){};
+}
+
+class FakeToastrService {
+  success() {}
+}
 
 describe('EditFilmComponent', () => {
   let component: EditFilmComponent;
   let fixture: ComponentFixture<EditFilmComponent>;
+  let filmService : FilmsService;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ EditFilmComponent ]
+      imports: [FormsModule, ReactiveFormsModule],
+      declarations: [ EditFilmComponent, FilmFormComponent ],
+      providers: [
+        FormBuilder,
+        { provide: ToastrService, useClass: FakeToastrService },
+        { provide: FilmsService, useClass: FakeFilmsService },
+        { provide: ErrorMessageService, useClass: FakeErrorMessageService },
+        {
+          provide: ActivatedRoute,
+          useValue: {snapshot: {params: {'id': '1'}}}
+        }
+      ]
     })
     .compileComponents();
   }));
@@ -16,10 +51,41 @@ describe('EditFilmComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(EditFilmComponent);
     component = fixture.componentInstance;
+    filmService = TestBed.get(FilmsService);
     fixture.detectChanges();
   });
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  describe('canDeactivate', () => {
+    it('', () => {
+      spyOn(component.filmForm, 'canDeactivate');
+
+      component.canDeactivate();
+
+      expect(component.filmForm.canDeactivate).toHaveBeenCalled();
+    });
+  });
+
+  describe('onSave', () => {
+    it('', () => {
+      spyOn(filmService, 'updateFilm').and.returnValue(of({ body: { data: { name: 'name' }}}));
+      spyOn(TestBed.get(ToastrService), 'success');
+
+      component.onSave({});
+
+      expect(TestBed.get(ToastrService).success).toHaveBeenCalled();
+    });
+  });
+
+  it('', () => {
+    spyOn(filmService, 'updateFilm').and.returnValue(throwError({ body: { data: { name: 'name' }}}));
+    spyOn(TestBed.get(ErrorMessageService), 'sendError');
+
+    component.onSave({});
+
+    expect(TestBed.get(ErrorMessageService).sendError).toHaveBeenCalled();
   });
 });

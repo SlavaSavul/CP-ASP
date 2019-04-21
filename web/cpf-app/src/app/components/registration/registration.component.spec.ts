@@ -1,6 +1,19 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { RegistrationComponent } from './registration.component';
+import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { AccountService } from 'src/app/services/account.service';
+
+class FakeAccountService {
+  checkLogin(){};
+  logout(){};
+  getEmail(){};
+  isAuthenticated(){};
+  isAdmin(){
+    return true;
+  };
+  login(){}
+}
 
 describe('RegistrationComponent', () => {
   let component: RegistrationComponent;
@@ -8,7 +21,12 @@ describe('RegistrationComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ RegistrationComponent ]
+      imports: [ReactiveFormsModule],
+      declarations: [ RegistrationComponent ],
+      providers: [
+        FormBuilder,
+        { provide: AccountService, useClass: FakeAccountService },
+      ]
     })
     .compileComponents();
   }));
@@ -21,5 +39,15 @@ describe('RegistrationComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  describe('onSubmit', () => {
+    it('', async(() => {
+      spyOn(component.eventEmitter, 'next');
+      
+      component.onSubmit();
+
+      expect(component.eventEmitter.next).toHaveBeenCalled();
+    }));
   });
 });
