@@ -7,6 +7,7 @@ import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Observable, of, throwError } from 'rxjs'; 
 import { PaginatorModule } from 'primeng/paginator';
 import {PanelModule} from 'primeng/panel';
+import { AccountService } from 'src/app/services/account.service';
 
 class FakeFilmsService {
   get(){
@@ -32,6 +33,17 @@ class FakeFilmsService {
   };
 }
 
+class FakeAccountService {
+  checkLogin(){};
+  logout(){};
+  getEmail(){};
+  isAuthenticated(){};
+  isAdmin(){
+    return true;
+  };
+  login(){}
+}
+
 describe('MainPageComponent', () => {
   let component: MainPageComponent;
   let fixture: ComponentFixture<MainPageComponent>;
@@ -50,7 +62,8 @@ describe('MainPageComponent', () => {
         {
           provide: Router,
           useValue: { navigate: () => {} }
-        }
+        },
+        { provide: AccountService, useClass: FakeAccountService },
       ]
     })
     .compileComponents();
