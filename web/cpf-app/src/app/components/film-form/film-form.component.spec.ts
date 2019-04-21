@@ -1,6 +1,12 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { FilmFormComponent } from './film-form.component';
+import { FormBuilder, ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { ToastrService } from 'ngx-toastr';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+
+class FakeToastrService {
+}
 
 describe('FilmFormComponent', () => {
   let component: FilmFormComponent;
@@ -8,7 +14,11 @@ describe('FilmFormComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ FilmFormComponent ]
+      imports: [ReactiveFormsModule, FormsModule, BrowserAnimationsModule],
+      declarations: [ FilmFormComponent ],
+      providers: [FormBuilder, 
+        { provide: ToastrService, useClass: FakeToastrService },
+    ]
     })
     .compileComponents();
   }));
@@ -20,6 +30,50 @@ describe('FilmFormComponent', () => {
   });
 
   it('should create', () => {
+    component.film = {genres: [""], date: "11.11.2011"} as any;
+    fixture.detectChanges();
     expect(component).toBeTruthy();
+  });
+
+  describe('markAsPristine', () => {
+    it('', () => {
+      spyOn(component.genreInput, 'reset');
+      spyOn(component.editFimlForm, 'markAsPristine');
+
+      component.markAsPristine();
+
+      expect(component.genreInput.reset).toHaveBeenCalled();
+    });
+  });
+
+  describe('addNewGenre', () => {
+    it('', () => {
+      spyOn(component, 'addGenre');
+
+      component.addNewGenre({} as any);
+
+      expect(component.addGenre).toHaveBeenCalled();
+    });
+  });
+
+  describe('onGenreDelete', () => {
+    it('', () => {
+      spyOn(component.genresFormArray.controls, 'indexOf').and.returnValue(1);
+      spyOn(component.genresFormArray, 'removeAt');
+      
+      component.onGenreDelete({});
+
+      expect(component.genresFormArray.removeAt).toHaveBeenCalled();
+    });
+  });
+
+  describe('onGenreAdd', () => {
+    it('', () => {
+      spyOn(component, 'addNewGenre').and.returnValue(1);
+      
+      component.onGenreAdd({});
+
+      expect(component.addNewGenre).toHaveBeenCalled();
+    });
   });
 });

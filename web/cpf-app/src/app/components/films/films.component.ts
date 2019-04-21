@@ -27,12 +27,10 @@ export class FilmsComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private router: Router,
     private formBuilder: FormBuilder,
-    private accountService: AccountService,
-    private toastr: ToastrService,
     ) { }
 
   ngOnInit() {
-   this.filmsService.gerGenres().subscribe( 
+   this.filmsService.getGenres().subscribe( 
      (response: HttpResponse<string[]>) => {
       this.genres = response.body;
      }

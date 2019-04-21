@@ -16,7 +16,7 @@ export class MainPageComponent implements OnInit {
     private filmsService: FilmsService, 
     private activatedRoute: ActivatedRoute,
     private router: Router,
-    private accountService: AccountService
+    public accountService: AccountService
     ) { }
   films: Film[] = [];
   page = 1;

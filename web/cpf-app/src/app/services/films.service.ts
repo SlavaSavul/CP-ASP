@@ -30,7 +30,7 @@ export class FilmsService {
     return this.http.put(`${this.externalService.getURL()}/api/films/`, film, { observe: 'response' });
   }
 
-  gerGenres() {
+  getGenres() {
     return this.http.get(`${this.externalService.getURL()}/api/films/genres`, { observe: 'response' });
   }
 
