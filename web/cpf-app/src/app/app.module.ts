@@ -13,7 +13,7 @@ import { LoginComponent } from './components/login/login.component';
 import { MainPageComponent } from './components/main-page/main-page.component';
 import { ReactiveFormsModule }   from '@angular/forms';
 import { ExternalService } from './services/external.service';
-import { ToastrModule } from 'ngx-toastr';
+import { ToastrModule, ToastrService } from 'ngx-toastr';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CommonModule } from '@angular/common';
 import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
@@ -63,7 +63,8 @@ export const httpInterceptorProviders = [
     FilmsService,
     CanDeactivateGuard,
     CanActivateGuard,
-    ErrorMessageService
+    ErrorMessageService,
+    ToastrService
   ],
   bootstrap: [AppComponent]
 })

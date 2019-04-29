@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation, ElementRef, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { FilmsService } from 'src/app/services/films.service';
 import { Film } from '../../models/film.model';
@@ -6,6 +6,7 @@ import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
 import { AccountService } from 'src/app/services/account.service';
 import { Comment } from '../../models/comment.model';
 import { ErrorMessageService } from 'src/app/services/error-message.service';
+import { Genre } from 'src/app/models/genre.model';
 
 @Component({
   selector: 'app-film',
@@ -14,6 +15,7 @@ import { ErrorMessageService } from 'src/app/services/error-message.service';
 })
 export class FilmComponent implements OnInit {
   film = new Film();
+  @ViewChild('comment') comment: ElementRef;
 
   constructor(
     private route: ActivatedRoute,
@@ -49,6 +51,7 @@ export class FilmComponent implements OnInit {
         }
       }
     );
+      this.comment.nativeElement.value = "";
   }
 
   getComments() {
@@ -60,5 +63,18 @@ export class FilmComponent implements OnInit {
           this.errorMessageService.sendError(error,'Comment');
       }
     );
+  }
+
+  getGenres(film: Film) {
+    let str = "";
+    if(film.genres){
+      str = film.genres.map((genre) => genre.genre).join(', ');
+    }
+    return str;
+  }
+
+  getUrl(film: Film)
+  {
+    return `url('${film.posterURL}')`;
   }
 }

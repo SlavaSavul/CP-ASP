@@ -27,6 +27,7 @@ export class FilmsComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private router: Router,
     private formBuilder: FormBuilder,
+    public accountService: AccountService
     ) { }
 
   ngOnInit() {

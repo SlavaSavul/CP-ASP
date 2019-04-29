@@ -80,7 +80,7 @@ export class FilmFormComponent implements OnInit, CanComponentDeactivate, OnDest
       ]],
       description: ['', [
         Validators.required,
-        Validators.maxLength(1000)
+        Validators.maxLength(10000)
       ]],
       posterURL: ['', [Validators.required]],
       imDbRaiting: ['', [
