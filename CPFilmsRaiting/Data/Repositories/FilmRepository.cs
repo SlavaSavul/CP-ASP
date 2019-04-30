@@ -56,6 +56,14 @@ namespace CPFilmsRaiting.Data.Repositories
                 .Include(film => film.Genres);
         }
 
+        public FilmModel GetWithoutInclude(string id)
+        {
+            FilmModel film = _context.Films
+                 .FirstOrDefault(f => f.Id == id);
+            film.Comments = film.Comments.OrderByDescending(c => c.Date).ToList();
+            return film;
+        }
+
         public IEnumerable<FilmModel> GetAll()
         {
             return _context.Films;

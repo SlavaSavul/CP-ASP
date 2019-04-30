@@ -26,6 +26,8 @@ import { CanActivateGuard } from './services/can-activate-guard.service';
 import { ErrorMessageService } from './services/error-message.service';
 import { FilmFormComponent } from './components/film-form/film-form.component';
 import { FilmsComponent } from './components/films/films.component';
+import { FavoriteComponent } from './components/favorite/favorite.component';
+import {ProgressBarModule} from 'primeng/progressbar';
 
 export const httpInterceptorProviders = [
   { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
@@ -43,6 +45,7 @@ export const httpInterceptorProviders = [
     EditFilmComponent,
     FilmFormComponent,
     FilmsComponent,
+    FavoriteComponent,
   ],
   imports: [
     BrowserModule,
@@ -54,6 +57,7 @@ export const httpInterceptorProviders = [
     PaginatorModule,
     PanelModule,
     ToastrModule.forRoot(),
+    ProgressBarModule
   ],
   providers: [
     httpInterceptorProviders,

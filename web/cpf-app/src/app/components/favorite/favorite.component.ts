@@ -8,11 +8,11 @@ import { Like } from 'src/app/models/like.model';
 import { ErrorMessageService } from 'src/app/services/error-message.service';
 
 @Component({
-  selector: 'app-main-page',
-  templateUrl: './main-page.component.html',
-  styleUrls: ['./main-page.component.scss']
+  selector: 'app-favorite',
+  templateUrl: './favorite.component.html',
+  styleUrls: ['./favorite.component.scss']
 })
-export class MainPageComponent implements OnInit {
+export class FavoriteComponent implements OnInit {
 
   constructor(
     private filmsService: FilmsService, 
@@ -49,7 +49,7 @@ export class MainPageComponent implements OnInit {
   }
 
   sendRequest(params: { page: number, limit: number }) {
-    this.filmsService.getAll(params).subscribe(
+    this.filmsService.getAll({...params, favorite: true}).subscribe(
       (response: HttpResponse<any>) => {
         console.log(response);
         if(response.body.films.length !== 0) {
@@ -58,7 +58,7 @@ export class MainPageComponent implements OnInit {
         }
       },
       (error: HttpErrorResponse) => {
-        this.router.navigate(['/notfound']);
+        this.films = [];
       }
     );
   }
@@ -75,14 +75,6 @@ export class MainPageComponent implements OnInit {
     return this.metaData ? this.metaData.count : 0;
   }
 
-  delete(id: string) {
-    this.filmsService.delete(id).subscribe(
-      (response: HttpResponse<any>) => {
-        this.sendRequest({ page: 1, limit: this.limit });
-      }
-    );
-  }
-
   like(id: string) {
     this.filmsService.like(id).subscribe(
       (response: HttpResponse<any>) => {
@@ -97,4 +89,5 @@ export class MainPageComponent implements OnInit {
   isLiked(id: string) {
     return this.likes ? this.likes.some((like) => like.filmId == id) : false;
   }
+
 }

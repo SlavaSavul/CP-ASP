@@ -13,6 +13,7 @@ namespace CPFilmsRaiting.Data
         CommentsRepository commentsRepository;
         RaitingRepository raitingRepository;
         UsersRepository usersRepository;
+        LikesRepository likesRepository;
         public UnitOfWork(ApplicationDbContext context)
         {
             _context = context;
@@ -25,6 +26,16 @@ namespace CPFilmsRaiting.Data
                 if (filmRepository == null)
                     filmRepository = new FilmRepository(_context);
                 return filmRepository;
+            }
+        }
+
+        public LikesRepository Likes
+        {
+            get
+            {
+                if (likesRepository == null)
+                    likesRepository = new LikesRepository(_context);
+                return likesRepository;
             }
         }
 

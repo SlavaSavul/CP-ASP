@@ -10,12 +10,15 @@ import { EditFilmComponent } from './components/edit-film/edit-film.component';
 import { CanDeactivateGuard } from './services/can-deactivate-guard.service';
 import { CanActivateGuard } from './services/can-activate-guard.service';
 import { FilmsComponent } from './components/films/films.component';
+import { FavoriteComponent } from './components/favorite/favorite.component';
 
 const routes: Routes = [
   { path: 'signup', component: RegistrationComponent },
   { path: 'signin', component: LoginComponent },
   { path: 'films', redirectTo: 'films/1', pathMatch: 'full' },
   { path: 'films/:page', component: FilmsComponent },
+  { path: 'favorite', pathMatch: 'full', redirectTo: 'favorite/1' },
+  { path: 'favorite/:page', pathMatch: 'full', component: FavoriteComponent },
   { path: 'film/:id', component: FilmComponent },
   { path: 'createfilm', component: CreateFilmComponent, canActivate: [CanActivateGuard], canDeactivate: [CanDeactivateGuard] },
   { path: 'editfilm/:id', component: EditFilmComponent, canDeactivate: [CanDeactivateGuard] },

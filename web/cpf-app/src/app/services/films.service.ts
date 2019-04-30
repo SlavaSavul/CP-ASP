@@ -46,4 +46,12 @@ export class FilmsService {
   delete(id: string){
     return this.http.delete(`${this.externalService.getURL()}/api/films/${id}`, { observe: 'response' });
   }
+  
+  like(id: string) {
+    return this.http.post(`${this.externalService.getURL()}/api/films/like/`, { FilmId: id } ,{ observe: 'response' });
+  }
+
+  getLike() {
+    return this.http.get(`${this.externalService.getURL()}/api/films/like/`, { observe: 'response' });
+  }
 }

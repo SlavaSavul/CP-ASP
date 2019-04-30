@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using CPFilmsRaiting.Data;
 using CPFilmsRaiting.Models;
@@ -35,6 +37,19 @@ namespace CPFilmsRaiting.Controllers
             IEnumerable<FilmModel> films = _unitOfWork.Films.GetAllWithInclude();
             IEnumerable<FilmModel> result = films.ToList();
             count = films.Count();
+
+            bool favorite = false;
+            if (!StringValues.IsNullOrEmpty(Request.Query["favorite"]))
+            {
+                var favoriteFilms = new List<FilmModel>();
+                favorite = bool.Parse(Request.Query["favorite"]);
+                var likes = _unitOfWork.Likes.GetByUserId(GetUserId());
+                foreach(LikeModel like in likes)
+                {
+                    favoriteFilms.Add(_unitOfWork.Films.GetWithoutInclude(like.FilmId));
+                }
+                result = favoriteFilms;
+            }
 
             int year = 0;
             if (int.TryParse(Request.Query["year"].ToString(), out year) )
@@ -72,9 +87,8 @@ namespace CPFilmsRaiting.Controllers
             {
                 page = int.Parse(Request.Query["page"]);
                 limit = int.Parse(Request.Query["limit"]);
-
                 result = result.Skip((page - 1) * limit).Take(limit);
-            }
+            }            
 
             if (page < 1 || limit < 1 || result.Count() < 1)
             {
@@ -149,6 +163,68 @@ namespace CPFilmsRaiting.Controllers
                 WriteResponseError("Already exists", 400);
             }
         }
+
+        [HttpPost("like")]
+        [Authorize]
+        public void Post([FromBody] LikeModel likeModel)
+        {
+            var userId = GetUserId();
+            _unitOfWork.Likes.Create(new LikeModel() {UserId = userId, FilmId = likeModel.FilmId});
+          
+        }
+
+        private string GetUserId()
+        {
+            StringValues authorizationHeader;
+            Request.Headers.TryGetValue("Authorization", out authorizationHeader);
+            string token = authorizationHeader.ToString().Split(" ")[1];
+
+            if (token != "null")
+            {
+                var handler = new JwtSecurityTokenHandler();
+                JwtSecurityToken jwtToken = handler.ReadJwtToken(token);
+                var claims = jwtToken.Claims;
+                var jti = claims.First(claim => claim.Type == ClaimsIdentity.DefaultNameClaimType).Value;
+                var userId = _unitOfWork.Users.GetByEmail(jti).Id;
+                return userId;
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        [HttpGet("like")]
+        [Authorize]
+        public void GetLikes()
+        {
+            StringValues authorizationHeader;
+            Request.Headers.TryGetValue("Authorization", out authorizationHeader);
+            string token = authorizationHeader.ToString().Split(" ")[1];
+
+            if (token != "null")
+            {
+                var handler = new JwtSecurityTokenHandler();
+                JwtSecurityToken jwtToken = handler.ReadJwtToken(token);
+                var claims = jwtToken.Claims;
+                var jti = claims.First(claim => claim.Type == ClaimsIdentity.DefaultNameClaimType).Value;
+                var userId = _unitOfWork.Users.GetByEmail(jti).Id;
+                var response = new
+                {
+                    likes = _unitOfWork.Likes.GetByUserId(userId)
+                };
+                WriteResponseData(response);
+            }
+            else
+            {
+                var response = new
+                {
+                };
+                WriteResponseData(response);
+            }
+        }
+
+
 
         [HttpPut]
         [Authorize(Roles = "admin")]

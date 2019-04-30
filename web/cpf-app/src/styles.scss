@@ -13,4 +13,9 @@
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
-  }
+}
+
+#toast-container > div {
+  font-size: 100% !important;
+  opacity: 1;
+}
