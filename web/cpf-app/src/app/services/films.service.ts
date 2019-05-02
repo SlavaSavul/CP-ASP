@@ -35,7 +35,6 @@ export class FilmsService {
   }
 
   createComment(comment: Comment) {
-
     return this.http.post(`${this.externalService.getURL()}/api/comments/`, comment, { observe: 'response' });
   }
 

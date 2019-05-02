@@ -1,7 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { FavoriteComponent } from './favorite.component';
-import { Observable, of } from 'rxjs';
+import { Observable, of, throwError } from 'rxjs';
 import { FilmsService } from 'src/app/services/films.service';
 import { ErrorMessageService } from 'src/app/services/error-message.service';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
@@ -31,6 +31,9 @@ class FakeFilmsService {
     return new Observable();
   }
   getAll(value) {
+    return new Observable();
+  }
+  like() {
     return new Observable();
   }
 }
@@ -125,4 +128,42 @@ describe('FavoriteComponent', () => {
       expect(component.getCount()).toEqual(1);
     });
   });
+
+  it('paginate', () => {
+    spyOn(TestBed.get(Router), 'navigate');
+
+    component.paginate({});
+
+    expect(TestBed.get(Router).navigate).toHaveBeenCalled();
+  });
+
+  it('getLikes shoud return likes', () => {
+    spyOn(TestBed.get(FilmsService), 'getLike').and.returnValue(of({body: { likes: [] }}));
+
+    component.getLikes();
+
+    expect(component.likes).toEqual([]);
+  });
+
+  describe('like', () => {
+    it('shoudl call getLikes', () => {
+      spyOn(component, 'getLikes');
+      spyOn(TestBed.get(FilmsService), 'like').and.returnValue(of({}));
+
+      component.like('1');
+
+      expect(component.getLikes).toHaveBeenCalled();
+    });
+
+    it('shoudl throw error', () => {
+      spyOn(component, 'getLikes');
+      spyOn(TestBed.get(FilmsService), 'like').and.returnValue(throwError({}));
+      spyOn(TestBed.get(ErrorMessageService), 'sendError');
+
+      component.like('1');
+
+      expect(TestBed.get(ErrorMessageService).sendError).toHaveBeenCalled();
+    });
+  });
+  
 });

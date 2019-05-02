@@ -43,9 +43,7 @@ export class FavoriteComponent implements OnInit {
         if(response.body.likes) {
           this.likes = response.body.likes;
         }
-      },
-      (error: HttpErrorResponse) => {
-    });
+      });
   }
 
   sendRequest(params: { page: number, limit: number }) {

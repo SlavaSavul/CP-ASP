@@ -122,7 +122,7 @@ describe('MainPageComponent', () => {
     });
   });
 
-  it('', () => {
+  it('paginate', () => {
     spyOn(TestBed.get(Router), 'navigate');
 
     component.paginate({});
