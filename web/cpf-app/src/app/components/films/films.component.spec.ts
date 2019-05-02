@@ -10,6 +10,7 @@ import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Observable, of, throwError } from 'rxjs'; 
 import { PaginatorModule } from 'primeng/paginator';
 import {PanelModule} from 'primeng/panel';
+import { AccountService } from 'src/app/services/account.service';
 
 class FakeFilmsService {
   get(){
@@ -32,6 +33,16 @@ class FakeFilmsService {
   }
 }
 
+class FakeAccountService {
+  checkLogin(){};
+  logout(){};
+  getEmail(){};
+  isAuthenticated(){};
+  isAdmin(){
+    return true;
+  };
+}
+
 describe('FilmsComponent', () => {
   let component: FilmsComponent;
   let fixture: ComponentFixture<FilmsComponent>;
@@ -50,7 +61,8 @@ describe('FilmsComponent', () => {
         {
           provide: Router,
           useValue: { navigate: () => {} }
-        }
+        },
+        { provide: AccountService, useClass: FakeAccountService },
       ]
     })
     .compileComponents();
@@ -138,25 +150,25 @@ describe('FilmsComponent', () => {
   });
 
   describe('getLimit', () => {
-    it('', () => {
+    it('shoukd return 5', () => {
       component.metaData = { limit: 5 } ;    
       
       expect(component.getLimit()).toEqual(5);
     });
 
-    it('', () => {
+    it('should return 0', () => {
       expect(component.getLimit()).toEqual(0);
     });
   });
 
-  describe('getLimit', () => {
-    it('', () => {
+  describe('getCount', () => {
+    it('should return 0', () => {
       expect(component.getCount()).toEqual(0);
     });
 
-    it('', () => {
+    it('should return 1', () => {
       component.metaData = { count: 1 };
-      expect(component.getCount()).toEqual(0);
+      expect(component.getCount()).toEqual(1);
     });
   });
 

@@ -8,6 +8,9 @@ import { Observable, of, throwError } from 'rxjs';
 import { PaginatorModule } from 'primeng/paginator';
 import {PanelModule} from 'primeng/panel';
 import { AccountService } from 'src/app/services/account.service';
+import { ProgressBarModule } from 'primeng/progressbar';
+import { ErrorMessageService } from 'src/app/services/error-message.service';
+import { Like } from 'src/app/models/like.model';
 
 class FakeFilmsService {
   get(){
@@ -31,6 +34,9 @@ class FakeFilmsService {
   delete() {
     return new Observable();
   };
+  getLike() {
+    return new Observable();
+  };
 }
 
 class FakeAccountService {
@@ -44,13 +50,17 @@ class FakeAccountService {
   login(){}
 }
 
+class FakeErrorMessageService {
+  sendError(){};
+}
+
 describe('MainPageComponent', () => {
   let component: MainPageComponent;
   let fixture: ComponentFixture<MainPageComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports: [ReactiveFormsModule, PaginatorModule, RouterModule],
+      imports: [ReactiveFormsModule, PaginatorModule, RouterModule, ProgressBarModule],
       declarations: [ MainPageComponent ],
       providers: [
         FormBuilder,
@@ -64,6 +74,7 @@ describe('MainPageComponent', () => {
           useValue: { navigate: () => {} }
         },
         { provide: AccountService, useClass: FakeAccountService },
+        { provide: ErrorMessageService, useClass: FakeErrorMessageService },
       ]
     })
     .compileComponents();
@@ -88,22 +99,48 @@ describe('MainPageComponent', () => {
     expect(component.sendRequest).toHaveBeenCalled();
   });
 
-  it('', () => {
-    component.metaData = {limit: 1};
+  describe('getLimit', () => {
+    it('shoukd return 5', () => {
+      component.metaData = { limit: 5 } ;    
+      
+      expect(component.getLimit()).toEqual(5);
+    });
 
-    expect(component.getLimit()).toEqual(1);
+    it('should return 0', () => {
+      expect(component.getLimit()).toEqual(0);
+    });
   });
 
-  it('', () => {
-    component.metaData = {count: 1};
-    
-    expect(component.getCount()).toEqual(1);
+  describe('getCount', () => {
+    it('should return 0', () => {
+      expect(component.getCount()).toEqual(0);
+    });
+
+    it('should return 1', () => {
+      component.metaData = { count: 1 };
+      expect(component.getCount()).toEqual(1);
+    });
   });
+
   it('', () => {
     spyOn(TestBed.get(Router), 'navigate');
 
     component.paginate({});
 
     expect(TestBed.get(Router).navigate).toHaveBeenCalled();
+  });
+
+  describe('isLiked', () =>{
+    it('should retrn true', () => {
+      const likes: Like[]= [{ filmId:'1'}, { filmId: '2'}];
+      component.likes = likes;
+
+      expect(component.isLiked('1')).toBeTruthy();
+    })
+
+    it('should retrn false', () => {
+      
+      expect(component.isLiked('3')).toBeFalsy();
+    })
   });
 });

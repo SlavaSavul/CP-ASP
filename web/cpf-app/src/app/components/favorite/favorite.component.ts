@@ -64,7 +64,7 @@ export class FavoriteComponent implements OnInit {
   }
 
   paginate(event) {
-    this.router.navigate([`/mainpage/${event.page + 1}`]);
+    this.router.navigate([`/favorite/${event.page + 1}`]);
   }
 
   getLimit() {

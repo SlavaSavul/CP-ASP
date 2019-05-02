@@ -76,4 +76,17 @@ describe('FilmFormComponent', () => {
       expect(component.addNewGenre).toHaveBeenCalled();
     });
   });
+
+  describe('canDeactivate', () => {
+    it('should return true', () => {
+      expect(component.canDeactivate()).toBeTruthy();
+    });
+
+    it('should return false', () => {
+      component.editFimlForm.markAsDirty();
+      spyOn(window, 'confirm').and.returnValue(false);
+
+      expect(component.canDeactivate()).toBeFalsy();
+    });
+  });
 });

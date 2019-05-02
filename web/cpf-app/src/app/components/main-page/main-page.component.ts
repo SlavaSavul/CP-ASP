@@ -80,7 +80,7 @@ export class MainPageComponent implements OnInit {
       (response: HttpResponse<any>) => {
         this.sendRequest({ page: 1, limit: this.limit });
       }
-    );
+    );  
   }
 
   like(id: string) {
