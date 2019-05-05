@@ -5,36 +5,41 @@
     <div class="col-xs-6 ">
       <form [formGroup]="editFimlForm" >
           <div class="form-group">
-            <label >Name</label>
+            <label >{{ 'resources.name' | translate }}</label>
             <input class="form-control" formControlName="name"/>
-            <div [hidden]="!editFimlForm.controls['name'].errors || !editFimlForm.controls['name'].dirty" class="error-msg">Invalid name</div>
+            <div [hidden]="!editFimlForm.controls['name'].errors || !editFimlForm.controls['name'].dirty" 
+            class="error-msg">{{ 'resources.invalid' | translate }} {{ 'resources.name' | translate }}</div>
           </div>
 
           <div class="form-group">
-            <label>Description</label>
+            <label>{{ 'resources.description' | translate }}</label>
             <textarea  class="form-control" formControlName="description" style="resize: vertical"></textarea>
-            <div [hidden]="!editFimlForm.controls['description'].errors || !editFimlForm.controls['description'].dirty" class="error-msg">Invalid description</div>
+            <div [hidden]="!editFimlForm.controls['description'].errors || !editFimlForm.controls['description'].dirty" 
+            class="error-msg">{{ 'resources.invalid' | translate }} {{ 'resources.description' | translate }}</div>
           </div>
 
           <div class="form-group">
-            <label>Poster URL</label>
+            <label>{{ 'resources.posterURL' | translate }}</label>
             <input  class="form-control" formControlName="posterURL"/>
-            <div [hidden]="!editFimlForm.controls['posterURL'].errors || !editFimlForm.controls['posterURL'].dirty" class="error-msg">Invalid poster URL</div>
+            <div [hidden]="!editFimlForm.controls['posterURL'].errors || !editFimlForm.controls['posterURL'].dirty"
+             class="error-msg">{{ 'resources.invalid' | translate }} {{ 'resources.posterURL' | translate }}</div>
           </div>
 
           <div class="form-group">
-            <label>IMDb raiting</label>
+            <label>{{ 'resources.raiting' | translate }}</label>
             <input  class="form-control" formControlName="imDbRaiting"/>
-            <div [hidden]="!editFimlForm.controls['imDbRaiting'].errors || !editFimlForm.controls['imDbRaiting'].dirty" class="error-msg">Invalid raiting</div>
+            <div [hidden]="!editFimlForm.controls['imDbRaiting'].errors || !editFimlForm.controls['imDbRaiting'].dirty"
+             class="error-msg">{{ 'resources.invalid' | translate }} {{ 'resources.raiting' | translate }}</div>
           </div>
 
           <div class="form-group">
-            <label>Date</label>
+            <label>{{ 'resources.date' | translate }}</label>
             <input  class="form-control" formControlName="date" type="date"/>
-            <div [hidden]="!editFimlForm.controls['date'].errors || !editFimlForm.controls['date'].dirty" class="error-msg">Invalid date</div>
+            <div [hidden]="!editFimlForm.controls['date'].errors || !editFimlForm.controls['date'].dirty" 
+            class="error-msg">{{ 'resources.invalid' | translate }} {{ 'resources.date' | translate }}</div>
           </div>
 
-          <label>Genres</label>
+          <label>{{ 'resources.genres' | translate }}</label>
           <div formArrayName="genres"> 
             <div class="form-inline"> 
               <form #form="ngForm">
@@ -50,9 +55,9 @@
                   class="form-control" 
                   style=" border-top-left-radius: 0; border-bottom-left-radius: 0;"
                   (click)="onGenreAdd(genreInput.value)" 
-                  value="Add">
-                  <div [hidden]="genreInput.valid || !genreInput.dirty" class="error-msg">Invalid genre</div>
-
+                  value="{{ 'resources.add' | translate }}">
+                  <div [hidden]="genreInput.valid || !genreInput.dirty" class="error-msg"
+                  >{{ 'resources.invalid' | translate }} {{ 'resources.genres' | translate }}</div>
               </form>
             </div>
             <hr>
@@ -63,7 +68,7 @@
             </div>
           </div>
           <br>
-          <button class="btn btn-default" (click)="onSubmit()">Save</button>
+          <button class="btn btn-default" (click)="onSubmit()">{{ 'resources.save' | translate }}</button>
         </form>
     </div>
   </div>

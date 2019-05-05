@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { FilmsService } from 'src/app/services/films.service';
 import { Film } from '../../models/film.model';
 import { RouterStateSnapshot, ActivatedRoute, Router } from '@angular/router';
@@ -6,6 +6,7 @@ import { AccountService } from 'src/app/services/account.service';
 import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
 import { Like } from 'src/app/models/like.model';
 import { ErrorMessageService } from 'src/app/services/error-message.service';
+import { detectChanges } from '@angular/core/src/render3';
 
 @Component({
   selector: 'app-favorite',
@@ -13,19 +14,28 @@ import { ErrorMessageService } from 'src/app/services/error-message.service';
   styleUrls: ['./favorite.component.scss']
 })
 export class FavoriteComponent implements OnInit {
-
-  constructor(
-    private filmsService: FilmsService, 
-    private activatedRoute: ActivatedRoute,
-    private router: Router,
-    public accountService: AccountService,
-    private error: ErrorMessageService
-    ) { }
   films: Film[] = [];
   page = 1;
   limit = 2;
   metaData: any;
   likes: Like[];
+  _isLoaded = false;
+
+  get isLoaded() {
+    return this._isLoaded;
+  }
+
+  set isLoaded(val) {
+    this._isLoaded = val;
+  }
+  
+  constructor(
+    private filmsService: FilmsService, 
+    private activatedRoute: ActivatedRoute,
+    private router: Router,
+    public accountService: AccountService,
+    private error: ErrorMessageService,
+    ) { }
 
   ngOnInit() {
     this.activatedRoute.params.subscribe(
@@ -53,10 +63,12 @@ export class FavoriteComponent implements OnInit {
         if(response.body.films.length !== 0) {
           this.films = response.body.films;
           this.metaData = response.body.metaData;
+          this.isLoaded = true;
         }
       },
       (error: HttpErrorResponse) => {
         this.films = [];
+        this.isLoaded = true;
       }
     );
   }
@@ -79,7 +91,7 @@ export class FavoriteComponent implements OnInit {
         this.getLikes();
       },
       (error: HttpErrorResponse) => {
-        this.error.sendError(error, 'Like');
+        this.error.sendError(error, 'resources.like');
       }
     );
   }

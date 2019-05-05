@@ -47,7 +47,7 @@ export class FilmComponent implements OnInit {
       },
       (error: HttpErrorResponse) => {
         if(error.status === 401) {
-          this.errorMessageService.sendError(error,'Comment');
+          this.errorMessageService.sendError(error,'resources.comment');
         }
       }
     );

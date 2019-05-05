@@ -3,6 +3,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { LoginComponent } from './login.component';
 import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AccountService } from 'src/app/services/account.service';
+import { TranslateModule } from '@ngx-translate/core';
 
 class FakeAccountService {
   checkLogin(){};
@@ -21,7 +22,7 @@ describe('LoginComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports: [ReactiveFormsModule],
+      imports: [ReactiveFormsModule, TranslateModule.forRoot()],
       declarations: [ LoginComponent ],
       providers: [
         FormBuilder,

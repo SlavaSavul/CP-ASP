@@ -8,6 +8,7 @@ import { FilmsService } from 'src/app/services/films.service';
 import { ErrorMessageService } from 'src/app/services/error-message.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { of, throwError } from 'rxjs';
+import { TranslateModule } from '@ngx-translate/core';
 
 
 class FakeRouter {
@@ -20,6 +21,7 @@ class FakeFilmsService {
 
 class FakeErrorMessageService {
   sendError(){};
+  sendSuccessMessage(){}
 }
 
 class FakeToastrService {
@@ -32,11 +34,10 @@ describe('CreateFilmComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports: [FormsModule, ReactiveFormsModule],
+      imports: [FormsModule, ReactiveFormsModule, TranslateModule.forRoot()],
       declarations: [ CreateFilmComponent, FilmFormComponent ],
       providers: [
         FormBuilder,
-        { provide: ToastrService, useClass: FakeToastrService },
         { provide: FilmsService, useClass: FakeFilmsService },
         { provide: ErrorMessageService, useClass: FakeErrorMessageService },
         {
@@ -72,12 +73,12 @@ describe('CreateFilmComponent', () => {
   describe('onSave', () => {
     it('should call toastr success', async(() => {
       spyOn(TestBed.get(FilmsService), 'createFilm').and.returnValue(of({ body: { film: { name: 'name' }}}));
-      spyOn(TestBed.get(ToastrService), 'success');
+      spyOn(TestBed.get(ErrorMessageService), 'sendSuccessMessage');
       spyOn(TestBed.get(Router), 'navigate');
 
       component.onSave({});
 
-      expect(TestBed.get(ToastrService).success).toHaveBeenCalled();
+      expect(TestBed.get(ErrorMessageService).sendSuccessMessage).toHaveBeenCalled();
     }));
   });
 

@@ -6,7 +6,8 @@ import { AccountService } from 'src/app/services/account.service';
 import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Genre } from 'src/app/models/genre.model';
-import { ToastrService } from 'ngx-toastr';
+import { ErrorMessageService } from 'src/app/services/error-message.service';
+import { Like } from 'src/app/models/like.model';
 
 @Component({
   selector: 'app-films',
@@ -21,13 +22,24 @@ export class FilmsComponent implements OnInit {
   metaData: any;
   genres: string[] = [];
   selectedGenres:  string[] = [];
+  likes: Like[];
+  _isLoaded = false;
+
+  get isLoaded() {
+    return this._isLoaded;
+  }
+
+  set isLoaded(val) {
+    this._isLoaded = val;
+  }
 
   constructor(
     private filmsService: FilmsService, 
     private activatedRoute: ActivatedRoute,
     private router: Router,
     private formBuilder: FormBuilder,
-    public accountService: AccountService
+    public accountService: AccountService,
+    private error: ErrorMessageService
     ) { }
 
   ngOnInit() {
@@ -109,11 +121,13 @@ export class FilmsComponent implements OnInit {
         if(response.body.films.length !== 0) {
           this.films = response.body.films;
           this.metaData = response.body.metaData;
+          this.isLoaded = true;
         }
       },
       (error: HttpErrorResponse) => {
         this.films = [];
         this.metaData = { count: 0, page: 0, limit: 0};
+        this.isLoaded = true;
       }
     );
   }
@@ -157,5 +171,31 @@ export class FilmsComponent implements OnInit {
         this.sendWithForm(1, this.limit);
       }
     );
+  }
+
+  like(id: string) {
+    this.filmsService.like(id).subscribe(
+      (response: HttpResponse<any>) => {
+        this.getLikes();
+      },
+      (error: HttpErrorResponse) => {
+        this.error.sendError(error, 'resources.like');
+      }
+    );
+  }
+
+  getLikes() {
+    this.filmsService.getLike().subscribe(
+      (response: HttpResponse<any>) => {
+        if(response.body.likes) {
+          this.likes = response.body.likes;
+        }
+      },
+      (error: HttpErrorResponse) => {
+    });
+  }
+
+  isLiked(id: string) {
+    return this.likes ? this.likes.some((like) => like.filmId == id) : false;
   }
 }

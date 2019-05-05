@@ -89,7 +89,7 @@ export class MainPageComponent implements OnInit {
         this.getLikes();
       },
       (error: HttpErrorResponse) => {
-        this.error.sendError(error, 'Like');
+        this.error.sendError(error, 'resources.like');
       }
     );
   }

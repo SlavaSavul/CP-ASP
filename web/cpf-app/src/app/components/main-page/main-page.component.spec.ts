@@ -11,6 +11,7 @@ import { AccountService } from 'src/app/services/account.service';
 import { ProgressBarModule } from 'primeng/progressbar';
 import { ErrorMessageService } from 'src/app/services/error-message.service';
 import { Like } from 'src/app/models/like.model';
+import { TranslateModule } from '@ngx-translate/core';
 
 class FakeFilmsService {
   get(){
@@ -60,7 +61,7 @@ describe('MainPageComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports: [ReactiveFormsModule, PaginatorModule, RouterModule, ProgressBarModule],
+      imports: [ReactiveFormsModule, PaginatorModule, RouterModule, ProgressBarModule, TranslateModule.forRoot()],
       declarations: [ MainPageComponent ],
       providers: [
         FormBuilder,

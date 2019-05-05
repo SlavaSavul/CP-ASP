@@ -4,11 +4,12 @@ import { ErrorMessageService } from './error-message.service';
 import { ToastrService, ToastrModule } from 'ngx-toastr';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { BrowserModule } from '@angular/platform-browser';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 describe('ErrorMessageService', () => {
   beforeEach(() => TestBed.configureTestingModule({
-    providers: [ToastrService, ErrorMessageService],
-    imports: [ BrowserModule, ToastrModule.forRoot(), BrowserAnimationsModule]
+    providers: [ToastrService, ErrorMessageService, TranslateService],
+    imports: [ BrowserModule, ToastrModule.forRoot(), BrowserAnimationsModule, TranslateModule.forRoot()]
   }));
 
   it('should be created', () => {

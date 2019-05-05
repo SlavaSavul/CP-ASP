@@ -12,6 +12,7 @@ import {PanelModule} from 'primeng/panel';
 import { AccountService } from 'src/app/services/account.service';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
+import { TranslateModule } from '@ngx-translate/core';
 
 class FakeFilmsService {
   get(){
@@ -52,7 +53,7 @@ describe('FilmComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports: [FormsModule, ReactiveFormsModule, PaginatorModule, PanelModule, BrowserAnimationsModule],
+      imports: [FormsModule, ReactiveFormsModule, PaginatorModule, PanelModule, BrowserAnimationsModule, TranslateModule.forRoot()],
       declarations: [FilmComponent, FilmFormComponent],
       providers: [
         FormBuilder,

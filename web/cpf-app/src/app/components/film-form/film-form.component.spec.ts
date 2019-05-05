@@ -4,8 +4,14 @@ import { FilmFormComponent } from './film-form.component';
 import { FormBuilder, ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { TranslateModule } from '@ngx-translate/core';
+import { ErrorMessageService } from 'src/app/services/error-message.service';
 
 class FakeToastrService {
+}
+
+class FakeErrorMessageService {
+  sendError(){};
 }
 
 describe('FilmFormComponent', () => {
@@ -14,10 +20,11 @@ describe('FilmFormComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports: [ReactiveFormsModule, FormsModule, BrowserAnimationsModule],
+      imports: [ReactiveFormsModule, FormsModule, BrowserAnimationsModule, TranslateModule.forRoot()],
       declarations: [ FilmFormComponent ],
       providers: [FormBuilder, 
         { provide: ToastrService, useClass: FakeToastrService },
+        { provide: ErrorMessageService, useClass: FakeErrorMessageService },
     ]
     })
     .compileComponents();

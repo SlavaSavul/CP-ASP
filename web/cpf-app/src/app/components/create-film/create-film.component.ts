@@ -24,7 +24,6 @@ export class CreateFilmComponent implements OnInit, CanComponentDeactivate, OnDe
 
   constructor(
     private filmService: FilmsService,
-    private toastr: ToastrService,
     private errorMessageService: ErrorMessageService,
     private router: Router,
     ) { }
@@ -37,13 +36,13 @@ export class CreateFilmComponent implements OnInit, CanComponentDeactivate, OnDe
     .subscribe(
       (response: HttpResponse<any>) => {
         console.log(response);
-        this.toastr.success(`${response.body.film.name} created!`);
+        this.errorMessageService.sendSuccessMessage(`${response.body.film.name}`, 'resources.created');
         this.filmForm.markAsPristine();
         this.router.navigate(["/"]);
       },
       (error: HttpErrorResponse) => {
         console.log(error);
-        this.errorMessageService.sendError(error, 'Create film error');
+        this.errorMessageService.sendError(error, 'resources.creatFilmError');
       }
     );
   }

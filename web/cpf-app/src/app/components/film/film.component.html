@@ -17,15 +17,15 @@
           <table class="table">
             <tbody>
               <tr>
-                <td>IMDb</td>
+                <td>{{ 'resources.iMDb' | translate }}</td>
                 <td>{{ film.imDbRaiting }}</td>
               </tr>
               <tr>
-                <td>Date of release</td>
+                <td>{{ 'resources.date' | translate }}</td>
                 <td>{{ film.date }}</td>
               </tr>
               <tr>
-                <td>Fenres</td>
+                <td>{{ 'resources.genres' | translate }}</td>
                 <td>{{ getGenres(film) }}</td>
               </tr>
             </tbody>
@@ -37,7 +37,7 @@
       </div>
     </div>
     <br>
-    <a routerLink="/" class="btn btn-primary" style="width: 100px">Back</a>
+    <a routerLink="/" class="btn btn-primary" style="width: 100px">{{ 'resources.back' | translate }}</a>
   </div>
   <br>
   <hr>
@@ -51,7 +51,7 @@
     </p-header>
     <textarea #comment class="form-control" type="area" style="border-radius: 0; width:100%; height: 80px; min-width: 100%; max-width: 100%"></textarea>
     <p-footer>
-        <button type="button" class="btn btn-success" (click)="onSendComment(comment.value)">Add</button>
+        <button type="button" class="btn btn-success" (click)="onSendComment(comment.value)">{{ 'resources.send' | translate }}</button>
     </p-footer> 
   </p-panel>
   

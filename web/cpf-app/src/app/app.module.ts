@@ -28,10 +28,18 @@ import { FilmFormComponent } from './components/film-form/film-form.component';
 import { FilmsComponent } from './components/films/films.component';
 import { FavoriteComponent } from './components/favorite/favorite.component';
 import {ProgressBarModule} from 'primeng/progressbar';
+import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
+import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { HttpClient } from '@angular/common/http';
 
 export const httpInterceptorProviders = [
   { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
 ];
+
+
+export function HttpLoaderFactory(http: HttpClient) {
+  return new TranslateHttpLoader(http);
+}
 
 @NgModule({
   declarations: [
@@ -57,7 +65,14 @@ export const httpInterceptorProviders = [
     PaginatorModule,
     PanelModule,
     ToastrModule.forRoot(),
-    ProgressBarModule
+    ProgressBarModule,
+    TranslateModule.forRoot({
+      loader: {
+        deps: [HttpClient],
+        provide: TranslateLoader,
+        useFactory: HttpLoaderFactory,
+      },
+    }),
   ],
   providers: [
     httpInterceptorProviders,

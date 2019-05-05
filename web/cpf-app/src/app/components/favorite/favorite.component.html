@@ -23,17 +23,24 @@
           <p class="card-text">{{ film.description }}</p>
         </div>  
         <br>
-       <button [ngStyle]="{ 'background': isLiked(film.id) ? 'red' : 'green' }" class="btn btn-primary" (click)="like(film.id)">Like</button>
+       <button [ngStyle]="{ 'background': isLiked(film.id) ? 'red' : 'green' }" class="btn btn-primary" 
+       (click)="like(film.id)">{{ 'resources.like' | translate }}</button>
       </div>
     </div>
   
   </div>
-  
   <p-paginator [rows]="getLimit()" [totalRecords]="getCount()" (onPageChange)="paginate($event)"></p-paginator>
   
 </div>
 <ng-template #notfound>
-  <p style="color:#686868; font-size: 170%; margin-left: 30px">
-    Nothing found
-  </p>
+    <p *ngIf="isLoaded" style="color:#686868; font-size: 170%; margin-left: 30px">
+        Not found
+    </p>
+    <p *ngIf="!isLoaded" style="color:#686868; font-size: 170%; margin-left: 30px">
+        <p-progressBar mode="indeterminate"></p-progressBar>
+    </p>
 </ng-template>
+
+
+  
+

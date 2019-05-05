@@ -13,6 +13,7 @@ import {
   animate,
   transition,
 } from '@angular/animations';
+import { ErrorMessageService } from 'src/app/services/error-message.service';
 
 @Component({
   selector: 'app-film-form',
@@ -65,7 +66,7 @@ export class FilmFormComponent implements OnInit, CanComponentDeactivate, OnDest
   
   constructor(
     private formBuilder: FormBuilder,
-    private toastr: ToastrService,
+    private errorMessageService: ErrorMessageService,
     ) { }
     
     get genresFormArray(): FormArray{
@@ -130,7 +131,7 @@ export class FilmFormComponent implements OnInit, CanComponentDeactivate, OnDest
     let flag = true;
     this.genresFormArray.controls.forEach((elem: FormGroup) => {
       if(elem.controls['genre'].value == value){
-        this.toastr.error('Already exists', 'Genre');
+        this.errorMessageService.sendErrorMessage('resources.alreadyExists', 'resources.genres');
         flag = false;
       }
     });

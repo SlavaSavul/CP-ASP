@@ -7,6 +7,7 @@ import { ErrorMessageService } from 'src/app/services/error-message.service';
 import { ToastrService } from 'ngx-toastr';
 import { FilmFormComponent } from '../film-form/film-form.component';
 import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { TranslateModule } from '@ngx-translate/core';
 
 class FakeFilmsService {
   get(){
@@ -18,11 +19,9 @@ class FakeFilmsService {
 }
 
 class FakeErrorMessageService {
-  sendError(){};
-}
+  sendError(){}
+  sendSuccessMessage(){}
 
-class FakeToastrService {
-  success() {}
 }
 
 describe('EditFilmComponent', () => {
@@ -32,11 +31,10 @@ describe('EditFilmComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports: [FormsModule, ReactiveFormsModule],
+      imports: [FormsModule, ReactiveFormsModule, TranslateModule.forRoot()],
       declarations: [ EditFilmComponent, FilmFormComponent ],
       providers: [
         FormBuilder,
-        { provide: ToastrService, useClass: FakeToastrService },
         { provide: FilmsService, useClass: FakeFilmsService },
         { provide: ErrorMessageService, useClass: FakeErrorMessageService },
         {
@@ -72,11 +70,11 @@ describe('EditFilmComponent', () => {
   describe('onSave', () => {
     it('', () => {
       spyOn(filmService, 'updateFilm').and.returnValue(of({ body: { data: { name: 'name' }}}));
-      spyOn(TestBed.get(ToastrService), 'success');
+      spyOn(TestBed.get(ErrorMessageService), 'sendSuccessMessage');
 
       component.onSave({});
 
-      expect(TestBed.get(ToastrService).success).toHaveBeenCalled();
+      expect(TestBed.get(ErrorMessageService).sendSuccessMessage).toHaveBeenCalled();
     });
   });
 

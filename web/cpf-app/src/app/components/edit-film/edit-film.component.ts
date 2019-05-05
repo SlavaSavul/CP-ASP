@@ -4,7 +4,6 @@ import { FilmsService } from 'src/app/services/films.service';
 import { Film } from '../../models/film.model';
 import { Genre } from '../../models/genre.model';
 import { FormGroup, Validators, FormBuilder, FormArray, FormControl } from '@angular/forms';
-import { ToastrService } from 'ngx-toastr';
 import { debounceTime, map } from 'rxjs/operators';
 import { Subject, Observable } from 'rxjs';
 import { CanComponentDeactivate } from '../../services/can-deactivate-guard.service';
@@ -26,7 +25,6 @@ export class EditFilmComponent implements OnInit, CanComponentDeactivate, OnDest
   constructor(
     private route: ActivatedRoute,
     private filmsService: FilmsService,
-    private toastr: ToastrService,
     private errorMessageService: ErrorMessageService
     ) { }
 
@@ -49,12 +47,12 @@ export class EditFilmComponent implements OnInit, CanComponentDeactivate, OnDest
           .subscribe(
             (response: HttpResponse<any>) => {
               console.log(response);
-              this.toastr.success(`${response.body.data.name} updated!`);
+              this.errorMessageService.sendSuccessMessage(`${response.body.data.name}`, 'resources.updated');
               this.filmForm.markAsPristine();
             },
             (error: HttpErrorResponse) => {
               console.log(error);
-              this.errorMessageService.sendError(error, 'Update film error');
+              this.errorMessageService.sendError(error, 'resources.updateFilmError');
             });
     }
 

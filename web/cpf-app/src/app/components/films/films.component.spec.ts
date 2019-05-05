@@ -11,6 +11,7 @@ import { Observable, of, throwError } from 'rxjs';
 import { PaginatorModule } from 'primeng/paginator';
 import {PanelModule} from 'primeng/panel';
 import { AccountService } from 'src/app/services/account.service';
+import { TranslateModule } from '@ngx-translate/core';
 
 class FakeFilmsService {
   get(){
@@ -33,6 +34,10 @@ class FakeFilmsService {
   }
 }
 
+class FakeErrorMessageService {
+  sendError(){};
+}
+
 class FakeAccountService {
   checkLogin(){};
   logout(){};
@@ -49,7 +54,7 @@ describe('FilmsComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports: [ReactiveFormsModule, PaginatorModule, RouterModule],
+      imports: [ReactiveFormsModule, PaginatorModule, RouterModule, TranslateModule.forRoot()],
       declarations: [ FilmsComponent ],
       providers: [
         FormBuilder,
@@ -63,6 +68,7 @@ describe('FilmsComponent', () => {
           useValue: { navigate: () => {} }
         },
         { provide: AccountService, useClass: FakeAccountService },
+        { provide: ErrorMessageService, useClass: FakeErrorMessageService },
       ]
     })
     .compileComponents();

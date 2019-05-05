@@ -12,6 +12,8 @@ import { PanelModule } from 'primeng/panel';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { Like } from 'src/app/models/like.model';
 import { compileComponent } from '@angular/core/src/render3/jit/directive';
+import { TranslateModule } from '@ngx-translate/core';
+import { ProgressBarModule } from 'primeng/progressbar';
 
 
 class FakeFilmsService {
@@ -76,7 +78,7 @@ describe('FavoriteComponent', () => {
         },
         { provide: AccountService, useClass: FakeAccountService },
       ],
-      imports: [FormsModule, ReactiveFormsModule, RouterModule, PaginatorModule, PanelModule, BrowserAnimationsModule],
+      imports: [FormsModule, ProgressBarModule, ReactiveFormsModule, RouterModule, PaginatorModule, PanelModule, BrowserAnimationsModule, TranslateModule.forRoot()],
     })
     .compileComponents();
   }));

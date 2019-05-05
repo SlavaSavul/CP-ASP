@@ -1,30 +1,31 @@
+<div>
 <div class="container" style="widows: 100vw;">
   <div class="row">
     <div class="col-xs-6 col-md-4">
       <form [formGroup]="form">
-          <label> Raiting </label>
+          <label> {{ 'resources.raiting' | translate }}</label>
           <input formControlName="raiting"
-            placeholder="raiting"
+            placeholder="{{ 'resources.raiting' | translate }}"
             [ngClass]="{'error': !isRaitingValid()}" 
             class="form-control" 
             type="text" 
             name="raiting"
             autocomplete="off">
-          <div [hidden]="isRaitingValid()" class="error-msg">Invalid range</div>
+          <div [hidden]="isRaitingValid()" class="error-msg">{{ 'resources.invalidRange' | translate }}</div>
           
-          <label> Year </label>
+          <label> {{ 'resources.year' | translate }} </label>
           <input formControlName="year"
-            placeholder="year"
+            placeholder="{{ 'resources.year' | translate }} "
             [ngClass]="{'error': !isYearValid()}" 
             class="form-control" 
             type="text" 
             name="raitingMin" 
             autocomplete="off">
-          <div [hidden]="isYearValid()" class="error-msg">Invalid year</div>
+          <div [hidden]="isYearValid()" class="error-msg">{{ 'resources.invalidYear' | translate }}</div>
           
-          <label> Name </label>
+          <label> {{ 'resources.name' | translate }} </label>
           <input formControlName="name"
-          placeholder="name"
+          placeholder=" {{ 'resources.name' | translate }}"
           class="form-control" 
           type="text" 
           name="name" 
@@ -41,13 +42,13 @@
           </div>
           
           <br>         
-          <button class="form-control" (click)="onSubmit()">Search</button>          
+          <button class="form-control" (click)="onSubmit()">{{ 'resources.search' | translate }}</button>          
       </form>
      
     </div>
     <div class="col-xs-12 col-md-8">
       
-        <div class="container" style="margin-bottom: 5%">
+        <div class="container" style="margin-bottom: 5%" *ngIf="getCount() > 0; else notfound" >
           
           <div *ngFor="let film of films" class="row" style="margin-bottom: 5px;">
             <div class="col-4">
@@ -71,20 +72,28 @@
               </div>  
               <br>
               <div class="btn-group" role="group" aria-label="Basic example" *ngIf="accountService.isAdmin()">
-                <a routerLink="/editfilm/{{film.id}}" class="btn btn-primary">Edit</a>
-                <button class="btn btn-primary" (click)="delete(film.id)">Delete</button>
-             </div>       
+                <a routerLink="/editfilm/{{film.id}}" class="btn btn-primary">{{ 'resources.edit' | translate }}</a>
+                <button class="btn btn-primary" (click)="delete(film.id)">{{ 'resources.delete' | translate }}</button>
+              </div>       
+              <button [ngStyle]="{ 'background': isLiked(film.id) ? 'red' : 'green' }" class="btn btn-primary" 
+                (click)="like(film.id)">{{ 'resources.like' | translate }}</button>
             </div>
           </div>  
             <br>
-          <p-paginator *ngIf="getCount() > 0; else notFound" 
-            [style]="{width: '75%'}" [rows]="getLimit()" 
-            [totalRecords]="getCount()" 
-            (onPageChange)="paginate($event)">
-          </p-paginator>
-          <ng-template #notFound>
-            <h1>Not Found</h1>
-          </ng-template>
+           
     </div>
   </div>
 </div>
+</div>
+<p-paginator *ngIf="getCount() > 0" 
+  [style]="{width: '100vw'}" [rows]="getLimit()" 
+  [totalRecords]="getCount()" 
+  (onPageChange)="paginate($event)">
+</p-paginator>
+</div>
+
+<ng-template #notfound>
+    <p *ngIf="isLoaded" style="color:#686868; font-size: 170%; margin-left: 30px">
+        {{ 'resources.notFound' | translate }}
+    </p>
+</ng-template>
