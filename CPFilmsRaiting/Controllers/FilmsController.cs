@@ -129,7 +129,7 @@ namespace CPFilmsRaiting.Controllers
         public void Get(string id)
         {
             var response = new
-            {
+            { 
                 data = _unitOfWork.Films.Get(id)
             };
             WriteResponseData(response);

@@ -46,7 +46,7 @@ class FakeAccountService {
   isAdmin(){
     return true;
   };
-}
+} 
 
 describe('FilmsComponent', () => {
   let component: FilmsComponent;
