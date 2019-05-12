@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using CPFilmsRaiting.Data;
 using CPFilmsRaiting.Models;
+using CPFilmsRaiting.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
@@ -17,12 +18,11 @@ namespace CPFilmsRaiting.Controllers
     [DisableCors]
     public class CommentsController : Controller
     {
+        DbService _dbService { get; set; }
 
-        UnitOfWork _unitOfWork { get; set; }
-
-        public CommentsController(UnitOfWork unitOfWork)
+        public CommentsController(DbService dbService)
         {
-            _unitOfWork = unitOfWork;
+            _dbService = dbService;
         }
 
         public IActionResult Index()
@@ -38,7 +38,7 @@ namespace CPFilmsRaiting.Controllers
            string name = User.Identity.Name;
             comment.Date = DateTime.Now;
             comment.UserName = name;
-            _unitOfWork.Comments.Create(comment);
+            _dbService.CreateComment(comment);
         }
 
         private void WriteResponseData(object response)

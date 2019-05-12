@@ -37,6 +37,8 @@
     "created": "Created",
     "updated": "Updated",
     "invalidRange": "Invalid Raiting",
-    "invalidYear": "Invalid Yaer"
+    "invalidYear": "Invalid Yaer",
+    "home": "Home"
+
   }
 }

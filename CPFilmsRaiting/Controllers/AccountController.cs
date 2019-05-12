@@ -8,6 +8,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using CPFilmsRaiting.Data;
 using CPFilmsRaiting.Models;
+using CPFilmsRaiting.Services;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -21,13 +22,13 @@ namespace CPFilmsRaiting.Controllers
     [DisableCors]
     public class AccountController : Controller
     {
-        UnitOfWork _unitOfWork;
+        DbService _dbService { get; set; }
         private readonly IHttpContextAccessor _context;
 
-        public AccountController(UnitOfWork unitOfWork, IHttpContextAccessor context)
+        public AccountController(DbService dbService, IHttpContextAccessor context)
         {
-            _unitOfWork = unitOfWork;
             _context = context;
+            _dbService = dbService;
         }
 
         [HttpPost("/registration")]
@@ -42,14 +43,13 @@ namespace CPFilmsRaiting.Controllers
             {
                await WriteResponseError("Invalid model validation", 400);
             }
-            else if (_unitOfWork.Users.GetByEmail(newUser.Email) != null)
+            else if (_dbService.GetUser(newUser.Email) != null)
             {
                 await WriteResponseError("Such email exists", 400);
             }
             else
             {
-                _unitOfWork.Users.Create(newUser);
-
+                _dbService.CreateUser(newUser);
                 await WriteResponseData(newUser);
             }
         }
@@ -122,7 +122,7 @@ namespace CPFilmsRaiting.Controllers
         [HttpPost("/login")]
         public async Task Login([FromBody]ApplicationUser user)
         {
-            if (_unitOfWork.Users.IsExists(user.Email, user.Password))
+            if (_dbService.IsUserExists(user.Email, user.Password))
             {
                 await WriteResponseData(user);
             }
@@ -163,7 +163,7 @@ namespace CPFilmsRaiting.Controllers
                     {
                         access_token = encodedJwt,
                         username = identity.Name,
-                        role = _unitOfWork.Users.GetByEmail(user.Email).Role
+                        role = _dbService.GetUser(user.Email).Role
                     }
                 };
 
@@ -193,7 +193,7 @@ namespace CPFilmsRaiting.Controllers
 
         private ClaimsIdentity GetIdentity(string username, string password)
         {
-            ApplicationUser user = _unitOfWork.Users.GetByEmail(username);
+            ApplicationUser user = _dbService.GetUser(username);
             if (user != null)
             {
                 var claims = new List<Claim>

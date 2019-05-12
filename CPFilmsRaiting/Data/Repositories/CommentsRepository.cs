@@ -20,7 +20,7 @@ namespace CPFilmsRaiting.Data.Repositories
             throw new NotImplementedException();
         }
 
-        public IEnumerable<CommentModel> GetAll(string id)
+        public IEnumerable<CommentModel> GetComments(string id)
         {
             return _context
                 .Comments
