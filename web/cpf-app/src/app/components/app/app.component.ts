@@ -17,14 +17,13 @@ export class AppComponent implements OnInit {
     public accountService: AccountService,
     private translateService: TranslateService,
   ){
-    
-    const languageCode = localStorage.getItem('languageCode');
-    this.currentLanguageCode = languageCode ? languageCode : 'en';
-    this.translateService.use(languageCode);
   }
 
   ngOnInit() {
     this.accountService.checkLogin();
+    const languageCode = localStorage.getItem('languageCode');
+    this.currentLanguageCode = languageCode ? languageCode : 'en';
+    this.translateService.use(this.currentLanguageCode);
   }
   
   changeLanguage($event) {

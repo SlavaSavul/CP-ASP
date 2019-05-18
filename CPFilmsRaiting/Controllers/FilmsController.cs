@@ -19,7 +19,6 @@ using Newtonsoft.Json.Serialization;
 namespace CPFilmsRaiting.Controllers
 {
     [Route("api/films")]
-    [DisableCors]
     public class FilmsController : Controller
     {
         DbService _dbService { get; set; }

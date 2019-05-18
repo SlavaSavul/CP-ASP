@@ -19,7 +19,6 @@ using Newtonsoft.Json;
 
 namespace CPFilmsRaiting.Controllers
 {
-    [DisableCors]
     public class AccountController : Controller
     {
         DbService _dbService { get; set; }

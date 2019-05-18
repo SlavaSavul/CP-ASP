@@ -15,7 +15,6 @@ using Newtonsoft.Json.Serialization;
 
 namespace CPFilmsRaiting.Controllers
 {
-    [DisableCors]
     public class CommentsController : Controller
     {
         DbService _dbService { get; set; }

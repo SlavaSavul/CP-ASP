@@ -57,6 +57,7 @@ namespace CPFilmsRaiting
             services.AddTransient<UnitOfWork>();
             services.AddTransient<DbService>();
             services.AddMvc();
+            services.AddCors();
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
@@ -75,6 +76,13 @@ namespace CPFilmsRaiting
             app.UseStaticFiles();
 
             app.UseAuthentication();
+            app.UseCors(
+               options => options
+                    .AllowAnyOrigin()
+                    .AllowAnyMethod()
+                    .AllowAnyHeader()
+                    .AllowCredentials()
+           );
 
             app.UseMvc();
         }
