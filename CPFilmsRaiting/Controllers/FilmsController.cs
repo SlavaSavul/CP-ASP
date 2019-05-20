@@ -78,9 +78,20 @@ namespace CPFilmsRaiting.Controllers
         [HttpGet("{id}")]
         public void Get(string id)
         {
+            FilmModel film = _dbService.Get(id);
             var response = new
             { 
-                data = _dbService.Get(id) 
+                data = new
+                {
+                    Id = film.Id,
+                    Name = film.Name,
+                    Description = film.Description,
+                    PosterURL = film.PosterURL,
+                    Date = film.Date,
+                    IMDbRaiting = film.IMDbRaiting,
+                    Comments = _dbService.getComments(film.Comments),
+                    Genres = film.Genres
+                } 
             };
             WriteResponseData(response);
         }
@@ -88,9 +99,12 @@ namespace CPFilmsRaiting.Controllers
         [HttpGet("{id}/comments")]
         public void GetComments(string id)
         {
+            List<CommentModel> list = _dbService.GetComments(id);
+
+            List<ViewCommentModel>  viewList = _dbService.getComments(list);
             var response = new
             {
-                comments = _dbService.GetComments(id)
+                comments = viewList
             };
             WriteResponseData(response);
         }
@@ -164,8 +178,6 @@ namespace CPFilmsRaiting.Controllers
                 WriteResponseData(response);
             }
         }
-
-
 
         [HttpPut]
         [Authorize(Roles = "admin")]

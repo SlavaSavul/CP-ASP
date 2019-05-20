@@ -52,7 +52,6 @@ namespace CPFilmsRaiting.Data.Repositories
         {
             return _context.Films
                 .Include(film => film.Comments)
-                .Include(film => film.Raitings)
                 .Include(film => film.Genres);
         }
 
@@ -73,7 +72,6 @@ namespace CPFilmsRaiting.Data.Repositories
         {
             FilmModel film = _context.Films
                 .Include(f => f.Comments)
-                .Include(f => f.Raitings)
                 .Include(f => f.Genres)
                 .FirstOrDefault(f => f.Id == item.Id);
 

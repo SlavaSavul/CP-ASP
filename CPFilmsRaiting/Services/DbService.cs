@@ -140,5 +140,19 @@ namespace CPFilmsRaiting.Services
 
             return count != 0 ? response : null;
         }
+
+        public List<ViewCommentModel> getComments(List<CommentModel> list)
+        {
+            List<ViewCommentModel> viewList = new List<ViewCommentModel>();
+            foreach (var i in list)
+            {
+                viewList.Add(new ViewCommentModel(i, getUserNameById(i.UserId)));
+            }
+            return viewList;
+        }
+        public string getUserNameById(string id)
+        {
+            return _unitOfWork.Users.Get(id).Email;
+        }
     }
 }

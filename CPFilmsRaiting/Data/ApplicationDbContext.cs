@@ -23,10 +23,7 @@ namespace CPFilmsRaiting.Data
         public DbSet<ApplicationUser> Users { get; set; }
         public DbSet<CommentModel> Comments { get; set; }
         public DbSet<FilmModel> Films { get; set; }
-        public DbSet<RaitingModel> Raiting { get; set; }
         public DbSet<GenreModel> Genres { get; set; }
         public DbSet<LikeModel> Likes { get; set; }
-
-        // public DbSet<FilmGenresModel> FilmGenres { get; set; }
     }
 }

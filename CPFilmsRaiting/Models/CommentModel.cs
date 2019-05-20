@@ -15,7 +15,7 @@ namespace CPFilmsRaiting.Models
         public string FilmId { get; set; }
 
         [Required]
-        public string UserName { get; set; }
+        public string UserId { get; set; }
 
         [Required]
         public string Description { get; set; }
@@ -24,5 +24,6 @@ namespace CPFilmsRaiting.Models
         public DateTime Date { get; set; }
 
         public FilmModel Film { get; set; }
+        public ApplicationUser User { get; set; }
     }
 }

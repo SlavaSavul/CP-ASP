@@ -31,14 +31,12 @@ namespace CPFilmsRaiting.Data.Repositories
         public ApplicationUser GetByEmail(string email)
         {
             return _context.Users
-                    .Include(user => user.Raitings)
                     .FirstOrDefault(user => user.Email == email);
         }
 
         public ApplicationUser Get(string id)
         {
             return _context.Users
-                    .Include(user => user.Raitings)
                     .FirstOrDefault(user => user.Id == id);
         }
 

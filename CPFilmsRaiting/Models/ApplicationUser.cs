@@ -23,6 +23,6 @@ namespace CPFilmsRaiting.Models
         [Required]
         public string Role { get; set; }
 
-        public List<RaitingModel> Raitings { get; set; }
+        public List<LikeModel> Likes { get; set; }
     }
 }

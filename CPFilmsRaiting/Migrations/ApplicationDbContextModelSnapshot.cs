@@ -4,7 +4,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
-using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.EntityFrameworkCore.Storage.Internal;
 using System;
 
@@ -52,12 +51,14 @@ namespace CPFilmsRaiting.Migrations
                     b.Property<string>("FilmId")
                         .IsRequired();
 
-                    b.Property<string>("UserName")
+                    b.Property<string>("UserId")
                         .IsRequired();
 
                     b.HasKey("Id");
 
                     b.HasIndex("FilmId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Comments");
                 });
@@ -113,29 +114,11 @@ namespace CPFilmsRaiting.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Likes");
-                });
-
-            modelBuilder.Entity("CPFilmsRaiting.Models.RaitingModel", b =>
-                {
-                    b.Property<string>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<string>("FilmId")
-                        .IsRequired();
-
-                    b.Property<string>("UserId")
-                        .IsRequired();
-
-                    b.Property<int>("Value");
-
-                    b.HasKey("Id");
-
                     b.HasIndex("FilmId");
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Raiting");
+                    b.ToTable("Likes");
                 });
 
             modelBuilder.Entity("CPFilmsRaiting.Models.CommentModel", b =>
@@ -143,6 +126,11 @@ namespace CPFilmsRaiting.Migrations
                     b.HasOne("CPFilmsRaiting.Models.FilmModel", "Film")
                         .WithMany("Comments")
                         .HasForeignKey("FilmId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("CPFilmsRaiting.Models.ApplicationUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
@@ -153,17 +141,15 @@ namespace CPFilmsRaiting.Migrations
                         .HasForeignKey("FilmModelId");
                 });
 
-            modelBuilder.Entity("CPFilmsRaiting.Models.RaitingModel", b =>
+            modelBuilder.Entity("CPFilmsRaiting.Models.LikeModel", b =>
                 {
                     b.HasOne("CPFilmsRaiting.Models.FilmModel", "Film")
-                        .WithMany("Raitings")
-                        .HasForeignKey("FilmId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .WithMany()
+                        .HasForeignKey("FilmId");
 
                     b.HasOne("CPFilmsRaiting.Models.ApplicationUser", "User")
-                        .WithMany("Raitings")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .WithMany("Likes")
+                        .HasForeignKey("UserId");
                 });
 #pragma warning restore 612, 618
         }

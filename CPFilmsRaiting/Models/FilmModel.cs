@@ -26,9 +26,7 @@ namespace CPFilmsRaiting.Models
         [Required]
         public double IMDbRaiting { get; set; }
 
-       // public List<FilmGenresModel> Genres { get; set; }
         public List<CommentModel> Comments { get; set; }
-        public List<RaitingModel> Raitings { get; set; }
         public List<GenreModel> Genres { get; set; }
     }
 }

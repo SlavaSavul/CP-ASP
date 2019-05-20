@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace CPFilmsRaiting.Migrations
 {
-    public partial class a : Migration
+    public partial class _11 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -13,9 +13,11 @@ namespace CPFilmsRaiting.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(nullable: false),
-                    Description = table.Column<string>(nullable: true),
-                    Name = table.Column<string>(nullable: true),
-                    PosterURL = table.Column<string>(nullable: true)
+                    Date = table.Column<DateTime>(nullable: false),
+                    Description = table.Column<string>(nullable: false),
+                    IMDbRaiting = table.Column<double>(nullable: false),
+                    Name = table.Column<string>(nullable: false),
+                    PosterURL = table.Column<string>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -27,9 +29,9 @@ namespace CPFilmsRaiting.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(nullable: false),
-                    Login = table.Column<string>(nullable: true),
-                    Password = table.Column<string>(nullable: true),
-                    Role = table.Column<string>(nullable: true)
+                    Email = table.Column<string>(nullable: false),
+                    Password = table.Column<string>(nullable: false),
+                    Role = table.Column<string>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -37,13 +39,33 @@ namespace CPFilmsRaiting.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Genres",
+                columns: table => new
+                {
+                    Id = table.Column<string>(nullable: false),
+                    FilmModelId = table.Column<string>(nullable: true),
+                    Genre = table.Column<string>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Genres", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Genres_Films_FilmModelId",
+                        column: x => x.FilmModelId,
+                        principalTable: "Films",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Comments",
                 columns: table => new
                 {
                     Id = table.Column<string>(nullable: false),
-                    Description = table.Column<string>(nullable: true),
-                    FilmId = table.Column<string>(nullable: true),
-                    UserId = table.Column<string>(nullable: true)
+                    Date = table.Column<DateTime>(nullable: false),
+                    Description = table.Column<string>(nullable: false),
+                    FilmId = table.Column<string>(nullable: false),
+                    UserId = table.Column<string>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -53,35 +75,34 @@ namespace CPFilmsRaiting.Migrations
                         column: x => x.FilmId,
                         principalTable: "Films",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Comments_Users_UserId",
                         column: x => x.UserId,
                         principalTable: "Users",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Raiting",
+                name: "Likes",
                 columns: table => new
                 {
                     Id = table.Column<string>(nullable: false),
                     FilmId = table.Column<string>(nullable: true),
-                    UserId = table.Column<string>(nullable: true),
-                    Value = table.Column<string>(nullable: true)
+                    UserId = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Raiting", x => x.Id);
+                    table.PrimaryKey("PK_Likes", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Raiting_Films_FilmId",
+                        name: "FK_Likes_Films_FilmId",
                         column: x => x.FilmId,
                         principalTable: "Films",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_Raiting_Users_UserId",
+                        name: "FK_Likes_Users_UserId",
                         column: x => x.UserId,
                         principalTable: "Users",
                         principalColumn: "Id",
@@ -99,13 +120,18 @@ namespace CPFilmsRaiting.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Raiting_FilmId",
-                table: "Raiting",
+                name: "IX_Genres_FilmModelId",
+                table: "Genres",
+                column: "FilmModelId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Likes_FilmId",
+                table: "Likes",
                 column: "FilmId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Raiting_UserId",
-                table: "Raiting",
+                name: "IX_Likes_UserId",
+                table: "Likes",
                 column: "UserId");
         }
 
@@ -115,7 +141,10 @@ namespace CPFilmsRaiting.Migrations
                 name: "Comments");
 
             migrationBuilder.DropTable(
-                name: "Raiting");
+                name: "Genres");
+
+            migrationBuilder.DropTable(
+                name: "Likes");
 
             migrationBuilder.DropTable(
                 name: "Films");
