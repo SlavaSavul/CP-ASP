@@ -1,14 +1,14 @@
 <div class="container" style="width: 50%">
 	<form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
-			<h4>{{ 'resources.createNewAccount' | translate }}</h4>
-			<hr />
+		<h4>{{ 'resources.createNewAccount' | translate }}</h4>
+		<hr />
 		<div class="form-group">
-			<label >{{ 'resources.email' | translate }}</label>
+			<label>{{ 'resources.email' | translate }}</label>
 			<input class="form-control" formControlName="email" />
 		</div>
 		<div class="form-group">
 			<label>{{ 'resources.password' | translate }}</label>
-			<input  class="form-control" formControlName="password"/>
+			<input class="form-control" type="password" formControlName="password" />
 		</div>
 		<button [disabled]='registerForm.invalid' class="btn btn-default">{{ 'resources.signUp' | translate }}</button>
 	</form>
